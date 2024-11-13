@@ -14,7 +14,7 @@ public class DestinationService {
     public ResponseEntity<List<Destination>> getPopular(int number) {
         List<Destination> destinations = new ArrayList<>();
         for (int i = 0; i < number; i++) {
-            Destination destination = new Destination(i, "Destination " + i);
+            Destination destination = new Destination(String.format("Name %d", i), String.format("Description %d", i));
             destinations.add(destination);
         }
 
