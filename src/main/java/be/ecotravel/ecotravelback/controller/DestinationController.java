@@ -1,9 +1,11 @@
 package be.ecotravel.ecotravelback.controller;
 
+import be.ecotravel.ecotravelback.entity.Destination;
 import be.ecotravel.ecotravelback.service.DestinationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -11,10 +13,16 @@ public class DestinationController {
 
     @Autowired
     DestinationService destinationService;
+    @Autowired
+    ObjectMapper objectMapper;
 
-    @GetMapping("/most-popular")
-    public ResponseEntity<?> destinations() {
-        return destinationService.getPopular(6);
+    @GetMapping("/popular-destination")
+    public Destination[] destinations() {
+        return destinationService.getPopular();
     }
 
+    @GetMapping("/destination/{id}")
+    public Destination getDestinationById(@PathVariable int id) {
+        return destinationService.getDestinationById(id);
+    }
 }
