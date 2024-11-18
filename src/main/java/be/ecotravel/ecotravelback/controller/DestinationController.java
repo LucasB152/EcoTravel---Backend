@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 public class DestinationController {
 
@@ -22,7 +24,7 @@ public class DestinationController {
     }
 
     @GetMapping("/destination/{id}")
-    public Destination getDestinationById(@PathVariable int id) {
+    public Destination getDestinationById(@PathVariable UUID id) {
         return destinationService.getDestinationById(id);
     }
 }

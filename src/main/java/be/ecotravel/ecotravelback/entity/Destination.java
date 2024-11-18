@@ -26,6 +26,8 @@ public class Destination {
 
     private String contactEmail;
 
+    private String imageFolderPath;
+
     @ManyToOne(optional = false)
     private User user;
 
@@ -37,7 +39,9 @@ public class Destination {
 
     protected Destination() {}
 
-    public Destination(String name, String description) {
+    //TODO retirer le url image du constructeur
+    public Destination(UUID id, String name, String description, String urlImage) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
