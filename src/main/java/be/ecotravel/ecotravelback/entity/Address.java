@@ -21,7 +21,31 @@ public class Address {
 
     private int postalCode;
 
+    private long longitude;
+
+    private long latitude;
+
     protected Address() {}
+
+    public Address(
+            UUID id,
+            String country,
+            String location,
+            String street,
+            int number,
+            int postalCode,
+            long longitude,
+            long latitude
+    ) {
+        this.id = id;
+        this.country = country;
+        this.location = location;
+        this.street = street;
+        this.number = number;
+        this.postalCode = postalCode;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
 
     //region Get Functions
     public UUID getId() {
