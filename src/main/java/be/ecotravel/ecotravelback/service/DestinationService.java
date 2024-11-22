@@ -1,5 +1,6 @@
 package be.ecotravel.ecotravelback.service;
 
+import be.ecotravel.ecotravelback.dto.DestinationDto;
 import be.ecotravel.ecotravelback.entity.Destination;
 import org.springframework.stereotype.Service;
 
@@ -37,10 +38,10 @@ public class DestinationService {
         return this.activities;
     }
 
-    public Destination getDestinationById(UUID id){
+    public DestinationDto getDestinationById(UUID id){
         for (Destination activity : activities) {
             if (activity.getId() == id) {
-                return activity;
+                return Mapper.destinationToDestinationDto(activity);
             }
         }
         return null;

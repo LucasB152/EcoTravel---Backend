@@ -8,6 +8,8 @@ public record ReviewDto(
     int score,
     String comment,
     LocalDateTime createdAt,
-    boolean isEdited
+    boolean isEdited,
+    UUID userId,
+    UUID destinationId
 ) {
 }

@@ -68,6 +68,10 @@ public class Review {
     //endregion
 
     //region Set functions
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public void setComment(String comment) {
         this.comment = comment;
     }

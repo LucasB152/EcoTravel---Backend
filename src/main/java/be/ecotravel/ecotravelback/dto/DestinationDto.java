@@ -1,5 +1,7 @@
 package be.ecotravel.ecotravelback.dto;
 
-public class DestinationDto {
+public record DestinationDto(
+
+) {
 
 }

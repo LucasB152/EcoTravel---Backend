@@ -8,8 +8,7 @@ public record ReportDto(
         String text,
         boolean isEdited,
         LocalDateTime date,
-        UserDto userDto,
-        DestinationDto destinationDto
+        UUID userId,
+        UUID destinationId
 ){
-
 }
