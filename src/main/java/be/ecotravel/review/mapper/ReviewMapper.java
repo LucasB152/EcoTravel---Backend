@@ -8,7 +8,7 @@ import be.ecotravel.review.dto.ReviewResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ReviewMapper {
 
     @Mapping(target = "id", ignore = true)

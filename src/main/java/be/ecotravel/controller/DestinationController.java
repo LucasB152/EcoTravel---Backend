@@ -1,6 +1,7 @@
 package be.ecotravel.controller;
 
 import be.ecotravel.destination.dto.DestinationDto;
+import be.ecotravel.destination.dto.DestinationResponseDto;
 import be.ecotravel.review.dto.ReviewCreationDto;
 import be.ecotravel.entity.Destination;
 import be.ecotravel.service.DestinationService;
@@ -27,13 +28,13 @@ public class DestinationController {
     }
 
     @GetMapping("/popular-destination")
-    public Destination[] destinations() {
-        return destinationService.getPopular();
+    public void destinations() {
+        //TODO
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DestinationDto> getDestinationById(@PathVariable UUID id) {
-        DestinationDto destination = destinationService.getDestinationById(id);
+    public ResponseEntity<DestinationResponseDto> getDestinationById(@PathVariable UUID id) {
+        DestinationResponseDto destination = destinationService.getDestinationById(id);
         if (destination == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -48,10 +49,5 @@ public class DestinationController {
     @PostMapping("/post-review")
     public void postReview(@RequestBody ReviewCreationDto reviewDto) {
         reviewService.createReview(reviewDto);
-    }
-
-    @PostMapping("/post-report")
-    public void postReport() {
-        //TODO
     }
 }

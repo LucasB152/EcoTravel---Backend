@@ -7,7 +7,7 @@ import be.ecotravel.report.dto.ReportCreationDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ReportMapper {
 
     @Mapping(target = "id", ignore = true)
