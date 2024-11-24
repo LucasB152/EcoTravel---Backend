@@ -1,6 +1,6 @@
 package be.ecotravel.service;
 
-import be.ecotravel.dto.DestinationDto;
+import be.ecotravel.destination.dto.DestinationDto;
 import be.ecotravel.entity.Destination;
 import org.springframework.stereotype.Service;
 

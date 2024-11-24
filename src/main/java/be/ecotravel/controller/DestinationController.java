@@ -1,6 +1,6 @@
 package be.ecotravel.controller;
 
-import be.ecotravel.dto.DestinationDto;
+import be.ecotravel.destination.dto.DestinationDto;
 import be.ecotravel.review.dto.ReviewCreationDto;
 import be.ecotravel.entity.Destination;
 import be.ecotravel.service.DestinationService;

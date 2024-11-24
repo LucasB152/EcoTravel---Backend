@@ -29,6 +29,10 @@ dependencies {
 	implementation("org.mapstruct:mapstruct:1.6.3")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
+	//Annotation pour les DTO
+	implementation("jakarta.validation:jakarta.validation-api:3.0.0")
+	implementation("org.hibernate.validator:hibernate-validator:6.2.0.Final")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")

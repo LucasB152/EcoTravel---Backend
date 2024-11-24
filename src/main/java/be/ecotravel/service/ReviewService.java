@@ -30,9 +30,8 @@ public class ReviewService {
         User user = userRepository.getReferenceById(reviewDto.userId());
         Destination destination = destinationRepository.getReferenceById(reviewDto.destinationId());
 
-        Review review = Mapper.reviewDtoToReview(reviewDto, user, destination);
-
-        reviewRepository.save(review);
+        //TODO
+        //reviewRepository.save(review);
     }
 
     public void editReview(ReviewCreationDto reviewDto) {

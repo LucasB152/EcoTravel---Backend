@@ -1,15 +1,21 @@
 package be.ecotravel.review.dto;
 
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.UUID;
 
 public record ReviewCreationDto(
-    UUID id,
+    @Min(0) @Max(5)
     int score,
+
     String comment,
-    LocalDateTime createdAt,
-    boolean isEdited,
+
+    @NotNull
     UUID userId,
+
+    @NotNull
     UUID destinationId
 ) {
 }

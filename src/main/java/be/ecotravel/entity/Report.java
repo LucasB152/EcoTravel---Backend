@@ -14,7 +14,7 @@ public class Report {
 
     private String text;
 
-    private boolean isEdited;
+    private boolean edited;
 
     private LocalDateTime date;
 
@@ -26,14 +26,25 @@ public class Report {
 
     protected Report() {}
 
-    public Report(UUID id, String text, boolean isEdited, LocalDateTime date, User user, Destination destination) {
+    public Report(UUID id, String text, User user, Destination destination) {
         this.id = id;
         this.text = text;
-        this.isEdited = isEdited;
-        this.date = date;
         this.user = user;
         this.destination = destination;
     }
+
+    //region Persistence Function
+    @PrePersist
+    public void prePersist() {
+        edited = false;
+        date = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        edited = true;
+    }
+    //endregion
 
     //region Get Functions
     public UUID getId() {
@@ -45,7 +56,7 @@ public class Report {
     }
 
     public boolean isEdited() {
-        return isEdited;
+        return edited;
     }
 
     public LocalDateTime getDate() {
@@ -66,8 +77,8 @@ public class Report {
         this.text = text;
     }
 
-    public void setEdited(boolean isEdited) {
-        this.isEdited = isEdited;
+    public void setEdited(boolean value) {
+        this.edited = value;
     }
     //endregion
 
