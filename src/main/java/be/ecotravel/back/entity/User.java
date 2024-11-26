@@ -1,58 +1,29 @@
 package be.ecotravel.back.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    private String name;
-
+    private String firstname;
     private String lastName;
-
     private String email;
-
     private String profilePicturePath;
-
+    private String password;
     @ManyToOne(optional = false)
-    private UserRole userRole;
+    private UserRole userRole = new UserRole();
 
-    protected User() {}
-
-    //region Get Functions
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getProfilePicturePath() {
-        return profilePicturePath;
-    }
-
-    public UserRole getRole() {
-        return userRole;
-    }
-    //endregion
-
-    //region Set Functions
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String name) {
+        this.firstname = name;
     }
 
     public void setLastName(String lastName) {
@@ -63,13 +34,44 @@ public class User {
         this.email = email;
     }
 
-    public void setProfilePicturePath(String profilePicturePath) {
-        this.profilePicturePath = profilePicturePath;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setRole(UserRole userRole) {
+    public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
     }
-    //endregion
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

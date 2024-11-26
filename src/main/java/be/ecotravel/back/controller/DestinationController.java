@@ -26,8 +26,8 @@ public class DestinationController {
     }
 
     @GetMapping("/popular-destination")
-    public void destinations() {
-        //TODO
+    public String destinations() {
+        return "test";
     }
 
     @GetMapping("/{id}")
