@@ -2,6 +2,7 @@ package be.ecotravel.back.service;
 
 import be.ecotravel.back.entity.User;
 import be.ecotravel.back.entity.UserRole;
+import be.ecotravel.back.exception.AuthenticationException;
 import be.ecotravel.back.repository.UserRepository;
 import be.ecotravel.back.repository.UserRoleRepository;
 import be.ecotravel.back.user.dto.LoginUserDto;
@@ -34,30 +35,41 @@ public class AuthenticationService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    public User signup(UserDto input) {
+    public User signup(UserDto input) throws AuthenticationException {
         Optional<UserRole> userRoleOptional = userRoleRepository.findByName("USER");
         if (userRoleOptional.isEmpty()) {
             throw new IllegalArgumentException("Role not found: user");
         }
-        User user = new User();
-        user.setFirstname(input.firstname());
-        user.setLastName(input.lastname());
-        user.setEmail(input.email());
-        user.setPassword(passwordEncoder.encode(input.password()));
-        user.setUserRole(userRoleOptional.get());
-
-        return userRepository.save(user);
+        if(userRepository.findByEmail(input.email()).isEmpty()) {
+            User user = new User();
+            user.setFirstname(input.firstname());
+            user.setLastName(input.lastname());
+            user.setEmail(input.email());
+            user.setPassword(passwordEncoder.encode(input.password()));
+            user.setUserRole(userRoleOptional.get());
+            return userRepository.save(user);
+        }else{
+            throw new AuthenticationException("This email is already used");
+        }
     }
 
-    public User authenticate(LoginUserDto input) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.email(),
-                        input.password()
-                )
-        );
-
-        return userRepository.findByEmail(input.email())
-                .orElseThrow();
+    public User authenticate(LoginUserDto input) throws AuthenticationException {
+        Optional<User> user = userRepository.findByEmail(input.email());
+        if (user.isPresent()) {
+            try {
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                input.email(),
+                                input.password()
+                        )
+                );
+                return user.get();
+            } catch (Exception exception) {
+                throw new AuthenticationException("Invalid email or password");
+            }
+        } else {
+            throw new AuthenticationException("There is no account with this email address");
+        }
     }
+
 }

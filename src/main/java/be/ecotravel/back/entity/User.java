@@ -3,6 +3,7 @@ package be.ecotravel.back.entity;
 import jakarta.persistence.*;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -45,12 +46,14 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority(userRole.getName()));
     }
+
     @Override
     public String getPassword() {
         return this.password;
     }
+
     @Override
     public String getUsername() {
         return this.email;
@@ -71,4 +74,9 @@ public class User implements UserDetails {
     public UserRole getUserRole() {
         return userRole;
     }
+
+    public UUID getId() {
+        return id;
+    }
 }
+

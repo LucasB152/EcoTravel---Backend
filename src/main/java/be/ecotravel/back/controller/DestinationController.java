@@ -26,8 +26,8 @@ public class DestinationController {
     }
 
     @GetMapping("/popular-destination")
-    public String destinations() {
-        return "test";
+    public HttpStatus destinations() {
+        return HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     @GetMapping("/{id}")
