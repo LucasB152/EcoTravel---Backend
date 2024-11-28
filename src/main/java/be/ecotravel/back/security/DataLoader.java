@@ -21,7 +21,7 @@ public class DataLoader implements CommandLineRunner {
         if (userRoleRepository.count() == 0) {
             userRoleRepository.save(new UserRole(UUID.randomUUID(), "USER"));
             userRoleRepository.save(new UserRole(UUID.randomUUID(), "ADMIN"));
-            userRoleRepository.save(new UserRole(UUID.randomUUID(), "HEBERGEUR"));
+            userRoleRepository.save(new UserRole(UUID.randomUUID(), "HOST"));
         }
     }
 }
