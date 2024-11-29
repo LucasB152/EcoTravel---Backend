@@ -1,9 +1,12 @@
 package be.ecotravel.back.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
 @Entity
 public class Itinerary {
 
@@ -11,53 +14,20 @@ public class Itinerary {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Setter
     private String name;
 
     @ManyToOne(optional = false)
     private User user;
 
+    @Setter
     @ManyToOne(optional = false)
     private Destination startDestination;
 
+    @Setter
     @ManyToOne(optional = false)
     private Destination endDestination;
 
     protected Itinerary() {}
-
-    //region Get Functions
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Destination getStartDestination() {
-        return startDestination;
-    }
-
-    public Destination getEndDestination() {
-        return endDestination;
-    }
-    //endregion
-
-    //region Set Functions
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setStartDestination(Destination startDestination) {
-        this.startDestination = startDestination;
-    }
-
-    public void setEndDestination(Destination endDestination) {
-        this.endDestination = endDestination;
-    }
-    //endregion
 
 }

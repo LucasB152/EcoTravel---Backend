@@ -21,20 +21,26 @@ import java.util.UUID;
 @RequestMapping("api/user")
 @RestController
 public class UserController {
+
     private final UserRepository userRepository;
+
     @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserReponse> getUserById(@PathVariable String id) {
         UUID uuid = UUID.fromString(id);
         Optional<User> userById = userRepository.findUserById(uuid);
+
         if (userById.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
         User user = userById.get();
         UserReponse response = new UserReponse(user.getFirstname(), user.getLastName(), user.getUsername(), user.getProfilePicturePath());
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

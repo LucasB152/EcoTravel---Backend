@@ -4,9 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
 @Entity
 public class DestinationType {
 
@@ -14,26 +17,13 @@ public class DestinationType {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Setter
     private String name;
 
     protected DestinationType() {}
 
     public DestinationType(UUID id, String name) {
         this.id = id;
-        this.name = name;
-    }
-
-    //Get
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    //Set
-    public void setName(String name) {
         this.name = name;
     }
 

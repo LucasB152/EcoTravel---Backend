@@ -1,9 +1,12 @@
 package be.ecotravel.back.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
 @Entity
 public class Destination {
 
@@ -11,20 +14,28 @@ public class Destination {
     @GeneratedValue(strategy= GenerationType.UUID)
     private UUID id;
 
+    @Setter
     private String name;
 
+    @Setter
     private String description;
 
+    @Setter
     private String price;
 
+    @Setter
     private String capacity;
 
+    @Setter
     private boolean isVisible;
 
+    @Setter
     private String contactPhone;
 
+    @Setter
     private String contactEmail;
 
+    @Setter
     private String imageFolderPath;
 
     @ManyToOne(optional = false)
@@ -44,28 +55,4 @@ public class Destination {
         this.name = name;
         this.description = description;
     }
-
-    //region Get Functions
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-    //endregion
-
-    //region Set Functions
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    //endregion
 }
