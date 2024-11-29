@@ -18,7 +18,10 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig{private final AuthenticationProvider authenticationProvider;
+public class SecurityConfig{
+
+    private final AuthenticationProvider authenticationProvider;
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfig(

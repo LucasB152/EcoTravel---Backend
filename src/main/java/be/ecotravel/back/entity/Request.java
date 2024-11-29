@@ -2,6 +2,7 @@ package be.ecotravel.back.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -13,13 +14,27 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Setter
+    private String text;
+
+    @Setter
+    @Enumerated(EnumType.ORDINAL)
+    private RequestStatus status;
+
     @OneToOne(optional = false)
     private User user;
 
     protected Request() {}
 
-    public Request(User user) {
+    public Request(String text, RequestStatus status, User user) {
+        this.text = text;
+        this.status = status;
         this.user = user;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.id = UUID.randomUUID();
     }
 
 }
