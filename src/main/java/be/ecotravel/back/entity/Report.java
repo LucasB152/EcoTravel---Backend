@@ -1,10 +1,13 @@
 package be.ecotravel.back.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
 @Entity
 public class Report {
 
@@ -12,8 +15,10 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Setter
     private String text;
 
+    @Setter
     private boolean edited;
 
     private LocalDateTime date;
@@ -43,42 +48,6 @@ public class Report {
     @PreUpdate
     public void preUpdate() {
         edited = true;
-    }
-    //endregion
-
-    //region Get Functions
-    public UUID getId() {
-        return id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public boolean isEdited() {
-        return edited;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Destination getDestination() {
-        return destination;
-    }
-    //endregion
-
-    //region Set Functions
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setEdited(boolean value) {
-        this.edited = value;
     }
     //endregion
 

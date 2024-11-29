@@ -37,9 +37,11 @@ public class AuthenticationService {
 
     public User signup(UserDto input) throws AuthenticationException {
         Optional<UserRole> userRoleOptional = userRoleRepository.findByName("USER");
+
         if (userRoleOptional.isEmpty()) {
             throw new IllegalArgumentException("Role not found: user");
         }
+
         if(userRepository.findByEmail(input.email()).isEmpty()) {
             User user = new User();
             user.setFirstname(input.firstname());
@@ -48,13 +50,14 @@ public class AuthenticationService {
             user.setPassword(passwordEncoder.encode(input.password()));
             user.setUserRole(userRoleOptional.get());
             return userRepository.save(user);
-        }else{
+        } else {
             throw new AuthenticationException("This email is already used");
         }
     }
 
     public User authenticate(LoginUserDto input) throws AuthenticationException {
         Optional<User> user = userRepository.findByEmail(input.email());
+
         if (user.isPresent()) {
             try {
                 authenticationManager.authenticate(
@@ -63,6 +66,7 @@ public class AuthenticationService {
                                 input.password()
                         )
                 );
+
                 return user.get();
             } catch (Exception exception) {
                 throw new AuthenticationException("Invalid email or password");

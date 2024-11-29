@@ -4,9 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
 
 import java.util.UUID;
 
+@Getter
 @Entity
 public class UserRole {
 
@@ -16,21 +18,11 @@ public class UserRole {
 
     private String name;
 
-    protected UserRole() {
-
-    }
+    protected UserRole() {}
 
     public UserRole(UUID id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
 }

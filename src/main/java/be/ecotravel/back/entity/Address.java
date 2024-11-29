@@ -1,9 +1,12 @@
 package be.ecotravel.back.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
 @Entity
 public class Address {
 
@@ -11,18 +14,25 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Setter
     private String country;
 
+    @Setter
     private String location;
 
+    @Setter
     private String street;
 
+    @Setter
     private int number;
 
+    @Setter
     private int postalCode;
 
+    @Setter
     private long longitude;
 
+    @Setter
     private long latitude;
 
     protected Address() {}
@@ -47,51 +57,4 @@ public class Address {
         this.latitude = latitude;
     }
 
-    //region Get Functions
-    public UUID getId() {
-        return id;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public int getPostalCode() {
-        return postalCode;
-    }
-    //endregion
-
-    //region Set Functions
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public void setPostalCode(int postalCode) {
-        this.postalCode = postalCode;
-    }
-    //endregion
 }

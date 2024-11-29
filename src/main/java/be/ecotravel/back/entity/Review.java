@@ -1,23 +1,29 @@
 package be.ecotravel.back.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
 @Entity
 public class Review {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Setter
     private int score;
 
+    @Setter
     private String comment;
 
     private LocalDateTime createdAt;
 
+    @Setter
     private boolean edited;
 
     @ManyToOne(optional = false)
@@ -44,52 +50,4 @@ public class Review {
         this.user = user;
         this.destination = destination;
     }
-
-    //region Get Functions
-    public UUID getId() {
-        return id;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public boolean isEdited() {
-        return edited;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Destination getDestination() {
-        return destination;
-    }
-    //endregion
-
-    //region Set functions
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public void setEdited(boolean value) {
-        this.edited = value;
-    }
-    //endregion
 }
