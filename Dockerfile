@@ -4,10 +4,8 @@ FROM openjdk:21-jdk AS build
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier le fichier build.gradle (ou build.gradle.kts si vous utilisez Kotlin)
-COPY build.gradle .
-# Si vous avez un fichier settings.gradle, vous pouvez aussi le copier :
-# COPY settings.gradle .
+# Copier le fichier build.gradle.kts
+COPY build.gradle.kts .
 
 # Copier le wrapper Gradle
 COPY gradlew .
@@ -16,7 +14,7 @@ COPY gradle gradle/
 # Copier les sources
 COPY src src
 
-# Donner les permissions d'exécution au wrapper gradle
+# Donner les permissions d'exécution au wrapper Gradle
 RUN chmod +x gradlew
 
 # Exécuter Gradle pour construire l'application (avec l'option clean pour éviter les conflits)
