@@ -2,6 +2,7 @@ package be.ecotravel.back.service;
 
 import be.ecotravel.back.entity.User;
 import be.ecotravel.back.entity.UserRole;
+import be.ecotravel.back.entity.UserRoleEnum;
 import be.ecotravel.back.exception.AuthenticationException;
 import be.ecotravel.back.repository.UserRepository;
 import be.ecotravel.back.repository.UserRoleRepository;
@@ -36,7 +37,7 @@ public class AuthenticationService {
     }
 
     public User signup(UserDto input) throws AuthenticationException {
-        Optional<UserRole> userRoleOptional = userRoleRepository.findByName("USER");
+        Optional<UserRole> userRoleOptional = userRoleRepository.findByName(UserRoleEnum.USER.name());
 
         if (userRoleOptional.isEmpty()) {
             throw new IllegalArgumentException("Role not found: user");
@@ -49,6 +50,7 @@ public class AuthenticationService {
             user.setEmail(input.email());
             user.setPassword(passwordEncoder.encode(input.password()));
             user.setUserRole(userRoleOptional.get());
+
             return userRepository.save(user);
         } else {
             throw new AuthenticationException("This email is already used");

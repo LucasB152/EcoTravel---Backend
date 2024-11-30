@@ -1,27 +1,22 @@
 package be.ecotravel.back.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
-
-import java.util.UUID;
 
 @Getter
 @Entity
 public class UserRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
+    @Column(unique = true, nullable = false)
     private String name;
 
     protected UserRole() {}
 
-    public UserRole(UUID id, String name) {
-        this.id = id;
+    public UserRole(String name) {
         this.name = name;
     }
 

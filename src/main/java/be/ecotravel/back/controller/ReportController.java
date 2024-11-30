@@ -17,7 +17,7 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @PostMapping("/create-report")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public void createReport(@RequestBody ReportCreationDto reportCreationDto) {
         reportService.createReport(reportCreationDto);

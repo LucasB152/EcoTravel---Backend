@@ -1,7 +1,7 @@
 package be.ecotravel.back.service;
 
 import be.ecotravel.back.entity.Request;
-import be.ecotravel.back.entity.RequestStatus;
+import be.ecotravel.back.entity.RequestStatusEnum;
 import be.ecotravel.back.entity.User;
 import be.ecotravel.back.repository.RequestRepository;
 import be.ecotravel.back.repository.UserRepository;
@@ -24,7 +24,7 @@ public class RequestService {
 
     public void createRequest(RequestCreationDto requestDto) {
         User user = userRepo.getReferenceById(requestDto.userId());
-        Request request = new Request(requestDto.text(), RequestStatus.WAITING, user);
+        Request request = new Request(requestDto.text(), RequestStatusEnum.WAITING, user);
         requestRepo.save(request);
     }
 

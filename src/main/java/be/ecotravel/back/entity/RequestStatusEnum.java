@@ -1,6 +1,6 @@
 package be.ecotravel.back.entity;
 
-public enum RequestStatus {
+public enum RequestStatusEnum {
     WAITING,
     DECLINED,
     ACCEPTED,

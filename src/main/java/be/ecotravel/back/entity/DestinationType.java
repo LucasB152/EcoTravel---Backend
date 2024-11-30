@@ -14,16 +14,14 @@ import java.util.UUID;
 public class DestinationType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    @Setter
     private String name;
 
     protected DestinationType() {}
 
-    public DestinationType(UUID id, String name) {
-        this.id = id;
+    public DestinationType(String name) {
         this.name = name;
     }
 

@@ -19,14 +19,14 @@ public class Request {
 
     @Setter
     @Enumerated(EnumType.ORDINAL)
-    private RequestStatus status;
+    private RequestStatusEnum status;
 
     @OneToOne(optional = false)
     private User user;
 
     protected Request() {}
 
-    public Request(String text, RequestStatus status, User user) {
+    public Request(String text, RequestStatusEnum status, User user) {
         this.text = text;
         this.status = status;
         this.user = user;
