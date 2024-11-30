@@ -2,8 +2,6 @@ HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### STS ###
 .apt_generated
@@ -35,30 +33,6 @@ out/
 
 ### VS Code ###
 .vscode/
-
-Pour ajouter le fichier application.properties dans votre .gitignore afin qu'il ne soit pas suivi par Git, vous devez suivre ces étapes :
-
-    Ouvrir ou créer le fichier .gitignore : Si un fichier .gitignore existe déjà dans la racine de votre projet, ouvrez-le. Sinon, créez-en un à la racine de votre projet (au même niveau que le dossier .git).
-
-    Ajouter application.properties dans .gitignore : Dans le fichier .gitignore, ajoutez la ligne suivante pour ignorer spécifiquement le fichier application.properties :
-
-application.properties
-
-Si vous souhaitez ignorer tous les fichiers application.properties dans le projet, quel que soit le sous-dossier dans lequel ils se trouvent, vous pouvez utiliser le caractère * pour indiquer tous les fichiers ayant ce nom :
-
-**/application.properties
-
-Vérifier que le fichier est bien ignoré : Si vous avez déjà ajouté application.properties à votre index Git (c'est-à-dire qu'il a déjà été suivi par Git), vous devrez le retirer de l'index. Utilisez la commande suivante pour le désindexer sans le supprimer :
-
-git rm --cached src/main/resources/application.properties
-
-Ensuite, vous pouvez confirmer que le fichier est bien ignoré avec la commande :
-
-    git status
-
-    Vous ne devriez plus voir application.properties dans la liste des fichiers suivis.
-
-Exemple complet pour .gitignore :
 
 # Ignorer le fichier application.properties
 src/main/resources/application.properties
