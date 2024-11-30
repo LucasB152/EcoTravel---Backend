@@ -40,7 +40,9 @@ public class SecurityConfig{
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/auth/**").permitAll()
+                                //TODO: Il faut encore que je change et je passe ceci à authenticated
                                 .requestMatchers("api/user/**").permitAll()
+                                .requestMatchers("/api/destination/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

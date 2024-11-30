@@ -41,10 +41,10 @@ public class Destination {
     @ManyToOne(optional = false)
     private User user;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private DestinationType destinationType;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private Address address;
 
     protected Destination() {}

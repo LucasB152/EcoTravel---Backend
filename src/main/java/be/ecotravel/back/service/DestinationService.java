@@ -7,6 +7,7 @@ import be.ecotravel.back.repository.DestinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,14 +23,14 @@ public class DestinationService {
         this.destinationRepo = destinationRepo;
     }
 
-    public void getPopular() {
-        //TODO
+    public List<Destination> getPopular() {
+        return this.destinationRepo.findAll();
     }
 
-    public DestinationResponseDto getDestinationById(UUID id){
+    public Destination getDestinationById(UUID id){
         Destination destination = destinationRepo.findById(id).orElse(null);
 
-        return destinationMapper.toResponseDto(destination);
+        return destination;
     }
 
     //TODO Retirer ça là
