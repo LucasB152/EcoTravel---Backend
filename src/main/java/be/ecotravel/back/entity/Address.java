@@ -27,7 +27,7 @@ public class Address {
     private int number;
 
     @Setter
-    private int postalCode;
+    private String postalCode;
 
     @Setter
     private long longitude;
@@ -43,7 +43,7 @@ public class Address {
             String location,
             String street,
             int number,
-            int postalCode,
+            String postalCode,
             long longitude,
             long latitude
     ) {
