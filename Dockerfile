@@ -4,6 +4,9 @@ FROM openjdk:21-jdk AS build
 # Définir le répertoire de travail
 WORKDIR /app
 
+# Installer xargs (findutils)
+RUN apt-get update && apt-get install -y findutils
+
 # Copier le fichier build.gradle.kts
 COPY build.gradle.kts .
 
