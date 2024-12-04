@@ -7,6 +7,9 @@ WORKDIR /app
 # Copier le fichier Gradle et le répertoire du projet
 COPY . .
 
+# Donner les permissions d'exécution à gradlew
+RUN chmod +x gradlew
+
 # Exécuter Gradle pour construire l'application
 RUN ./gradlew build -x test
 

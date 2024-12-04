@@ -38,6 +38,8 @@ public class User implements UserDetails {
     @ManyToOne(optional = false)
     private UserRole userRole = new UserRole();
 
+    private boolean isActivated = false;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(userRole.getName()));
@@ -51,6 +53,14 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return this.email;
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated() {
+        isActivated = true;
     }
 }
 

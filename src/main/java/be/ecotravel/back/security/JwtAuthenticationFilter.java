@@ -1,5 +1,6 @@
 package be.ecotravel.back.security;
 
+import be.ecotravel.back.entity.User;
 import be.ecotravel.back.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -56,8 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (userId != null && authentication == null) {
-                System.out.println(userId);
-                UserDetails userDetails = this.userRepository.findUserById(UUID.fromString(userId)).get();
+                User userDetails = this.userRepository.findUserById(UUID.fromString(userId)).get();
 
                 String role = jwtService.extractClaim(jwt, claims -> claims.get("role", String.class));
 
