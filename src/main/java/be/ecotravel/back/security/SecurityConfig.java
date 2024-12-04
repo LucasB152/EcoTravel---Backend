@@ -40,8 +40,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/auth/**").permitAll()
-                                //TODO: Il faut encore que je change et je passe ceci à authenticated
-                                .requestMatchers("api/user/**").permitAll()
+                                .requestMatchers("/api/user/**").authenticated()
                                 .requestMatchers("/api/destination/**").permitAll()
                                 .anyRequest().authenticated()
                 )
