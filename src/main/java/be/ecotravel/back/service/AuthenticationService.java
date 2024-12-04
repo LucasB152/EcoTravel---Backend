@@ -9,6 +9,7 @@ import be.ecotravel.back.repository.UserRoleRepository;
 import be.ecotravel.back.security.JwtService;
 import be.ecotravel.back.user.dto.LoginUserDto;
 import be.ecotravel.back.user.dto.UserDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,13 +21,13 @@ import java.util.UUID;
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
     private final UserRoleRepository userRoleRepository;
     private final JwtService jwtService;
     private final EmailService emailService;
+    @Value("${ecotravel.apiurl}")
+    private String apiUrl;
 
     public AuthenticationService(
             UserRepository userRepository,
@@ -78,7 +79,7 @@ public class AuthenticationService {
         if(user.isPresent()) {
             User userFromDataBase = user.get();
             String token = jwtService.generateToken(userFromDataBase);
-            String verificationLink = "http://localhost:8081/api/auth/verify-email/" + token;
+            String verificationLink = apiUrl + "auth/verify-email/" + token;
 
             String emailContent = "<html>" +
                     "<body>" +
