@@ -32,9 +32,4 @@ public class DestinationService {
 
         return destination;
     }
-
-    //TODO Retirer ça là
-    private UUID getNewId() {
-        return UUID.randomUUID();
-    }
 }

@@ -43,6 +43,7 @@ public class SecurityConfig{
                                 //TODO: Il faut encore que je change et je passe ceci à authenticated
                                 .requestMatchers("api/user/**").permitAll()
                                 .requestMatchers("/api/destination/**").permitAll()
+                                .requestMatchers("/api/request/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
