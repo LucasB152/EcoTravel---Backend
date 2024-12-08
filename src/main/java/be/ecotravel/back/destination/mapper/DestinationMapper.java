@@ -1,13 +1,23 @@
 package be.ecotravel.back.destination.mapper;
 
+import be.ecotravel.back.address.mapper.AddressMapper;
+import be.ecotravel.back.destination.dto.DestinationCreationDto;
 import be.ecotravel.back.destination.dto.DestinationResponseDto;
 import be.ecotravel.back.entity.Destination;
+import be.ecotravel.back.entity.DestinationType;
+import be.ecotravel.back.entity.DestinationTypeEnum;
+import be.ecotravel.back.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { AddressMapper.class })
 public interface DestinationMapper {
 
-    Destination toEntity(DestinationResponseDto dto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "imageFolderPath", ignore = true)
+    @Mapping(target = "address", source = "dto.addressCreationDto")
+    @Mapping(target = "destinationType", source = "type")
+    Destination toEntity(DestinationCreationDto dto, DestinationType type, User user);
 
     DestinationResponseDto toResponseDto(Destination entity);
 

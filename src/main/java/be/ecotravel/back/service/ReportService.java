@@ -1,6 +1,6 @@
 package be.ecotravel.back.service;
 
-import be.ecotravel.back.destination.dto.DestinationDto;
+import be.ecotravel.back.destination.dto.DestinationCreationDto;
 import be.ecotravel.back.entity.Destination;
 import be.ecotravel.back.entity.Report;
 import be.ecotravel.back.entity.User;
@@ -40,7 +40,7 @@ public class ReportService {
         reportRepo.save(report);
     }
 
-    public List<ReportResponseDto> getReportsOfDestination(DestinationDto destinationDto) throws Exception {
+    public List<ReportResponseDto> getReportsOfDestination(DestinationCreationDto destinationCreationDto) throws Exception {
         throw new Exception(); //TODO
     }
 
