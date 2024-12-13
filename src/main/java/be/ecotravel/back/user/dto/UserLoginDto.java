@@ -1,6 +1,6 @@
 package be.ecotravel.back.user.dto;
 
-public record LoginUserDto(
+public record UserLoginDto(
         String email,
         String password
 ) {
