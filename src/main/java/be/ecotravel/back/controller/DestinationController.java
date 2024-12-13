@@ -40,10 +40,9 @@ public class DestinationController {
     @GetMapping("/destination-onmap")
     public ResponseEntity<List<DestinationOnMapDto>> destinationOnMap() {
         //todo remove this (debug)
-        System.out.println("LOG destinationONMAP");
         List<DestinationOnMapDto> destinationOnMapTEMP = List.of(
-                new DestinationOnMapDto(UUID.randomUUID(), 50.7636, 5.5273, "maison en foret", "host", List.of("https://www.houseplans.net/uploads/plans/32005/elevations/88909-768.jpg", "\"https://casaeconstrucao.org/wp-content/uploads/2020/03/casas-baratas-tiny-house-no-jardim.jpg\"")),
-                new DestinationOnMapDto(UUID.randomUUID(), 50.66036, 5.5993, "acrobranche", "activity", List.of("https://ecopark-adventures.com/wp-content/uploads/2019/07/HP-Main-picture-Tournai-e1580480117562.jpg")));
+                new DestinationOnMapDto(UUID.randomUUID(), 50.7636, 5.5273, "maison en foret","tres tres jolie maison en foret avec les ours", "host", List.of("https://www.houseplans.net/uploads/plans/32005/elevations/88909-768.jpg", "https://casaeconstrucao.org/wp-content/uploads/2020/03/casas-baratas-tiny-house-no-jardim.jpg")),
+                new DestinationOnMapDto(UUID.randomUUID(), 50.66036, 5.5993, "acrobranche","acrobranche AGILE dans les arbres", "activity", List.of("https://ecopark-adventures.com/wp-content/uploads/2019/07/HP-Main-picture-Tournai-e1580480117562.jpg")));
 
         return new ResponseEntity<>(destinationOnMapTEMP, HttpStatus.OK);
     }

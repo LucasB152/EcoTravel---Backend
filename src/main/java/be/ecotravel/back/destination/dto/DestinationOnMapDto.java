@@ -20,16 +20,19 @@ public class DestinationOnMapDto {
     @Setter
     private String name;
     @Setter
+    private String description;
+    @Setter
     private String destinationTypeName;
     @Setter
     private List<String> images;
 
 
-    public DestinationOnMapDto(UUID destinationID, double lat, double lng, String name, String destinationTypeName, List<String> images) {
+    public DestinationOnMapDto(UUID destinationID, double lat, double lng, String name,String description , String destinationTypeName, List<String> images) {
         this.destinationID = destinationID;
         this.lat = lat;
         this.lng = lng;
         this.name = name;
+        this.description = description;
         this.destinationTypeName = destinationTypeName;
         this.images = images;
     }
@@ -49,6 +52,10 @@ public class DestinationOnMapDto {
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getDestinationTypeName() {
