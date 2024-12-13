@@ -1,4 +1,4 @@
-package be.ecotravel.back.security;
+package be.ecotravel.back.service;
 
 import be.ecotravel.back.entity.User;
 import io.jsonwebtoken.Claims;
@@ -14,7 +14,6 @@ import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,10 +66,12 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, User user) {
-        final String id = extractUsername(token);
-        if(id.equals(user.getId().toString())){
+        String id = extractUsername(token);
+
+        if ( id.equals(user.getId().toString()) ) {
             return !isTokenExpired(token);
         }
+
         return false;
     }
 

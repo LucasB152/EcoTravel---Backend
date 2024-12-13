@@ -20,7 +20,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String firstname;
+    private String firstName;
 
     private String lastName;
 
@@ -30,10 +30,10 @@ public class User implements UserDetails {
 
     private String password;
 
+    private boolean activated;
+
     @ManyToOne(optional = false)
     private UserRole userRole = new UserRole();
-
-    private boolean activated = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -41,13 +41,13 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return this.password;
+    public String getUsername() {
+        return this.email;
     }
 
     @Override
-    public String getUsername() {
-        return this.email;
+    public String getPassword() {
+        return this.password;
     }
 }
 

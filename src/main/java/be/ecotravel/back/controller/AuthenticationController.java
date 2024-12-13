@@ -2,11 +2,12 @@ package be.ecotravel.back.controller;
 
 import be.ecotravel.back.entity.User;
 import be.ecotravel.back.exception.AuthenticationException;
-import be.ecotravel.back.security.JwtService;
+import be.ecotravel.back.service.JwtService;
 import be.ecotravel.back.security.LoginResponse;
 import be.ecotravel.back.service.AuthenticationService;
+import be.ecotravel.back.service.UserService;
 import be.ecotravel.back.user.dto.LoginUserDto;
-import be.ecotravel.back.user.dto.UserDto;
+import be.ecotravel.back.user.dto.UserCreationDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,18 +19,20 @@ public class AuthenticationController {
     private final JwtService jwtService;
 
     private final AuthenticationService authenticationService;
+    private final UserService userService;
 
-    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
+    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService, UserService userService) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
+        this.userService = userService;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@RequestBody UserDto registerUserDto) {
+    public ResponseEntity<?> register(@RequestBody UserCreationDto registerUserCreationDto) {
         String message;
 
         try {
-            message = authenticationService.signup(registerUserDto);
+            message = userService.createUser(registerUserCreationDto);
         } catch (AuthenticationException exception) {
             return ResponseEntity.status(400).body(exception.getMessage());
         }

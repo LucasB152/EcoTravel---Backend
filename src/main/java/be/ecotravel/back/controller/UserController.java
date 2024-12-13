@@ -35,7 +35,7 @@ public class UserController {
         }
 
         User user = userById.get();
-        UserResponse response = new UserResponse(user.getFirstname(), user.getLastName(), user.getUsername(), user.getProfilePicturePath());
+        UserResponse response = new UserResponse(user.getFirstName(), user.getLastName(), user.getUsername(), user.getProfilePicturePath());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
