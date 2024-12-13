@@ -26,7 +26,8 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody UserDto registerUserDto) {
-        String message = null;
+        String message;
+
         try {
             message = authenticationService.signup(registerUserDto);
         } catch (AuthenticationException exception) {

@@ -32,11 +32,11 @@ public class DataLoader implements CommandLineRunner {
 
         if (userRoleRepository.count() != roleValues.length) {
             for (UserRoleEnum roleValue : roleValues) {
-                if (userRoleRepository.existsByName(roleValue.name())) {
+                if (userRoleRepository.existsByName(roleValue)) {
                     continue;
                 }
 
-                userRoleRepository.save(new UserRole(roleValue.name()));
+                userRoleRepository.save(new UserRole(roleValue));
             }
         }
     }

@@ -46,7 +46,7 @@ public class AuthenticationService {
     }
 
     public String signup(UserDto input) throws AuthenticationException {
-        Optional<UserRole> userRoleOptional = userRoleRepository.findByName(UserRoleEnum.USER.name());
+        Optional<UserRole> userRoleOptional = userRoleRepository.findByName(UserRoleEnum.USER);
 
         if (userRoleOptional.isEmpty()) {
             throw new IllegalArgumentException("Role not found: user");
@@ -128,15 +128,16 @@ public class AuthenticationService {
         }
     }
 
-    public boolean verifyEmail(String token) throws AuthenticationException {
+    public void verifyEmail(String token) throws AuthenticationException {
         String id = jwtService.extractUsername(token);
-        Optional<User> user = userRepository.findUserById(UUID.fromString(id));
+        Optional<User> user = userRepository.findUserById(UUID.fromString(id)); //TODO Transformer en else throw
 
         if(user.isPresent()){
-            user.get().setActivated();
+            user.get().setActivated(true);
             userRepository.save(user.get());
-            return true;
+            return;
         }
+
         throw new AuthenticationException("User not found");
     }
 }
