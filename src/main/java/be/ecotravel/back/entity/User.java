@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 public class User implements UserDetails {
 
@@ -19,35 +20,24 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Setter
-    private String firstname;
+    private String firstName;
 
-    @Setter
     private String lastName;
 
-    @Setter
     private String email;
 
-    @Setter
     private String profilePicturePath;
 
-    @Setter
     private String password;
 
-    @Setter
+    private boolean activated;
+
     @ManyToOne(optional = false)
     private UserRole userRole = new UserRole();
 
-    private boolean isActivated = false;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userRole.getName()));
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
+        return List.of(new SimpleGrantedAuthority(userRole.getName().name()));
     }
 
     @Override
@@ -55,12 +45,9 @@ public class User implements UserDetails {
         return this.email;
     }
 
-    public boolean isActivated() {
-        return isActivated;
-    }
-
-    public void setActivated() {
-        isActivated = true;
+    @Override
+    public String getPassword() {
+        return this.password;
     }
 }
 

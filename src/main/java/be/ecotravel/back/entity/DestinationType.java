@@ -1,15 +1,13 @@
 package be.ecotravel.back.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 public class DestinationType {
 
@@ -17,12 +15,13 @@ public class DestinationType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private DestinationTypeEnum type;
 
     protected DestinationType() {}
 
-    public DestinationType(String name) {
-        this.name = name;
+    public DestinationType(DestinationTypeEnum type) {
+        this.type = type;
     }
 
 }

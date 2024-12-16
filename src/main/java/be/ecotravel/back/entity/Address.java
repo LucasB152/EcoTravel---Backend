@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 public class Address {
 
@@ -14,40 +15,31 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Setter
     private String country;
 
-    @Setter
     private String location;
 
-    @Setter
     private String street;
 
-    @Setter
-    private int number;
+    private String number;
 
-    @Setter
     private String postalCode;
 
-    @Setter
-    private long longitude;
+    private double longitude;
 
-    @Setter
-    private long latitude;
+    private double latitude;
 
     protected Address() {}
 
     public Address(
-            UUID id,
             String country,
             String location,
             String street,
-            int number,
+            String number,
             String postalCode,
-            long longitude,
-            long latitude
+            double longitude,
+            double latitude
     ) {
-        this.id = id;
         this.country = country;
         this.location = location;
         this.street = street;
