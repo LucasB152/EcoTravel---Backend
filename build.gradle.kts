@@ -49,6 +49,9 @@ dependencies {
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 
+	//Cloudinary pour l'upload d'images
+	implementation("com.cloudinary:cloudinary-http44:1.31.0")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
