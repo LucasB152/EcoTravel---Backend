@@ -1,8 +1,7 @@
 package be.ecotravel.back.controller;
 
-import be.ecotravel.back.service.CloudinaryService;
 import be.ecotravel.back.service.UserService;
-import be.ecotravel.back.user.dto.UserDto;
+import be.ecotravel.back.user.dto.UserCreationDto;
 import be.ecotravel.back.user.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,8 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
@@ -28,7 +31,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> putUserById(@PathVariable String id, @RequestBody UserDto registerUserDto){
+    public ResponseEntity<?> putUserById(@PathVariable String id, @RequestBody UserCreationDto registerUserDto){
         try {
             return ResponseEntity.status(201).body(userService.putUserById(id, registerUserDto));
         } catch (Exception e) {

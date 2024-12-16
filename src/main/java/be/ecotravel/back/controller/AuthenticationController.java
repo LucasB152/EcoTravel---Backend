@@ -8,6 +8,7 @@ import be.ecotravel.back.service.AuthenticationService;
 import be.ecotravel.back.service.UserService;
 import be.ecotravel.back.user.dto.UserLoginDto;
 import be.ecotravel.back.user.dto.UserCreationDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class AuthenticationController {
     private final UserService userService;
     private final EmailService emailService;
 
+    @Autowired
     public AuthenticationController(
             TokenService tokenService,
             AuthenticationService authenticationService,
