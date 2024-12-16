@@ -1,8 +1,8 @@
 package be.ecotravel.back.controller;
 
-import be.ecotravel.back.destination.dto.DestinationResponseDto;
 import be.ecotravel.back.entity.Destination;
 import be.ecotravel.back.review.dto.ReviewCreationDto;
+import be.ecotravel.back.service.CloudinaryService;
 import be.ecotravel.back.service.DestinationService;
 import be.ecotravel.back.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +17,12 @@ import java.util.UUID;
 @RequestMapping("/api/destination")
 public class DestinationController {
 
-    private final DestinationService destinationService;
-
-    private final ReviewService reviewService;
-
     @Autowired
-    public DestinationController(DestinationService destinationService, ReviewService reviewService) {
-        this.destinationService = destinationService;
-        this.reviewService = reviewService;
-    }
+    private DestinationService destinationService;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @GetMapping("/popular-destination")
     public ResponseEntity<List<Destination>> destinations() {
@@ -40,6 +37,15 @@ public class DestinationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(destination, HttpStatus.OK);
+    }
+
+    @GetMapping("/pictures")
+    public List<String> getImageFromDestination(){
+        try {
+            return cloudinaryService.getImagesFromFolder("userPicture");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/reviews/{id}")

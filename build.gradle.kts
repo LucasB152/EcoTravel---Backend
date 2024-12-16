@@ -47,6 +47,9 @@ dependencies {
 	implementation("jakarta.validation:jakarta.validation-api:3.0.0")
 	implementation("org.hibernate.validator:hibernate-validator:6.2.0.Final")
 
+	//Cloudinary pour l'upload d'images
+	implementation("com.cloudinary:cloudinary-http44:1.31.0")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")

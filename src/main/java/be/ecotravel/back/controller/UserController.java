@@ -1,42 +1,47 @@
 package be.ecotravel.back.controller;
 
-import be.ecotravel.back.entity.User;
-import be.ecotravel.back.repository.UserRepository;
+import be.ecotravel.back.service.CloudinaryService;
+import be.ecotravel.back.service.UserService;
+import be.ecotravel.back.user.dto.UserDto;
 import be.ecotravel.back.user.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("api/user")
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserService userService;
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
-        UUID uuid = UUID.fromString(id);
-        Optional<User> userById = userRepository.findUserById(uuid);
-
-        if (userById.isEmpty()) {
+        try {
+            UserResponse response = userService.getUserById(id);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
 
-        User user = userById.get();
-        UserResponse response = new UserResponse(user.getFirstname(), user.getLastName(), user.getUsername(), user.getProfilePicturePath());
+    @PutMapping("/{id}")
+    public ResponseEntity<?> putUserById(@PathVariable String id, @RequestBody UserDto registerUserDto){
+        try {
+            return ResponseEntity.status(201).body(userService.putUserById(id, registerUserDto));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @PostMapping("/picture/{id}")
+    public ResponseEntity<?> postProfilePicture(@PathVariable String id, @RequestParam("file") MultipartFile file){
+        try {
+            return ResponseEntity.ok(userService.addProfilePicture(id, file));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erreur lors de l'upload : " + e.getMessage());
+        }
     }
 }
