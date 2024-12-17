@@ -19,13 +19,11 @@ import java.util.UUID;
 public class DestinationController {
 
     private final DestinationService destinationService;
-    private final ReviewService reviewService;
     private final CloudinaryService cloudinaryService;
 
     @Autowired
-    public DestinationController(DestinationService destinationService, ReviewService reviewService, CloudinaryService cloudinaryService) {
+    public DestinationController(DestinationService destinationService, CloudinaryService cloudinaryService) {
         this.destinationService = destinationService;
-        this.reviewService = reviewService;
         this.cloudinaryService = cloudinaryService;
     }
 
@@ -48,15 +46,5 @@ public class DestinationController {
     public ResponseEntity<UUID> postDestination(@RequestBody DestinationCreationDto destinationDto) {
         UUID destinationId = destinationService.createDestination(destinationDto);
         return new ResponseEntity<>(destinationId, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/reviews/{id}")
-    public void getReviews() {
-        //TODO
-    }
-
-    @PostMapping("/post-review")
-    public void postReview(@RequestBody ReviewCreationDto reviewDto) {
-        reviewService.createReview(reviewDto);
     }
 }

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import be.ecotravel.back.user.dto.UserResponse;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -89,11 +88,12 @@ public class UserService {
 
     private User findUserById (String id) throws EntityNotFoundException {
         UUID uuid = UUID.fromString(id);
+
         return userRepository.findUserById(uuid)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public UserResponse putUserById (String id, UserCreationDto registerUserDto) throws Exception {
+    public UserResponse putUserById (String id, UserCreationDto registerUserDto) {
         User user = findUserById(id);
 
         if (registerUserDto.email() != null && !registerUserDto.email().equals(user.getEmail())) {
