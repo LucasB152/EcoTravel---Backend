@@ -2,10 +2,8 @@ package be.ecotravel.back.controller;
 
 import be.ecotravel.back.destination.dto.DestinationCreationDto;
 import be.ecotravel.back.entity.Destination;
-import be.ecotravel.back.review.dto.ReviewCreationDto;
 import be.ecotravel.back.service.CloudinaryService;
 import be.ecotravel.back.service.DestinationService;
-import be.ecotravel.back.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
