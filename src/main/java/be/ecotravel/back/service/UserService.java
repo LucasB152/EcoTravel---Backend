@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import be.ecotravel.back.user.dto.UserResponse;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -84,7 +83,7 @@ public class UserService {
 
     public UserResponse getUserById (String id) throws EntityNotFoundException {
         User user = findUserById(id);
-        return new UserResponse(user.getFirstName(), user.getLastName(), user.getUsername(), user.getProfilePicturePath());
+        return new UserResponse(user.getFirstname(), user.getLastname(), user.getUsername(), user.getProfilePicturePath());
     }
 
     private User findUserById (String id) throws EntityNotFoundException {
@@ -100,12 +99,12 @@ public class UserService {
             user.setEmail(registerUserDto.email());
         }
 
-        if (registerUserDto.firstName() != null && !registerUserDto.firstName().equals(user.getFirstName())) {
-            user.setFirstName(registerUserDto.firstName());
+        if (registerUserDto.firstname() != null && !registerUserDto.firstname().equals(user.getFirstname())) {
+            user.setFirstname(registerUserDto.firstname());
         }
 
-        if (registerUserDto.lastName() != null && !registerUserDto.lastName().equals(user.getLastName())) {
-            user.setLastName(registerUserDto.lastName());
+        if (registerUserDto.lastname() != null && !registerUserDto.lastname().equals(user.getLastname())) {
+            user.setLastname(registerUserDto.lastname());
         }
 
         userRepository.save(user);
@@ -115,7 +114,7 @@ public class UserService {
     public UserResponse addProfilePicture (String id, MultipartFile file) throws Exception {
         String imageUrl = cloudinaryService.uploadImageToFolder(file, "userPicture", id);
         User user = findUserById(id);
-        if (!user.getProfilePicturePath().equals(imageUrl)) {
+        if (user.getProfilePicturePath() == null) {
             user.setProfilePicturePath(imageUrl);
         }
         userRepository.save(user);
