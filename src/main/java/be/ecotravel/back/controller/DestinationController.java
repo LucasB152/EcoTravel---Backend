@@ -1,7 +1,8 @@
 package be.ecotravel.back.controller;
 
-import be.ecotravel.back.destination.dto.DestinationOnMapDto;
 import be.ecotravel.back.destination.dto.DestinationCreationDto;
+import be.ecotravel.back.destination.dto.DestinationOnSearchDto;
+import be.ecotravel.back.destination.dto.SearchCriteria;
 import be.ecotravel.back.entity.Destination;
 import be.ecotravel.back.review.dto.ReviewCreationDto;
 import be.ecotravel.back.service.CloudinaryService;
@@ -36,18 +37,24 @@ public class DestinationController {
         return new ResponseEntity<>(popularDestination, HttpStatus.OK);
     }
 
-    /**
-     * Récupère les destinations pour la page d'accueil (pour la map)
-     * @return liste de DestinationOnMapDto
-     */
-    @GetMapping("/destination-onmap")
-    public ResponseEntity<List<DestinationOnMapDto>> destinationOnMap() {
-        //todo remove this (debug)
-        List<DestinationOnMapDto> destinationOnMapTEMP = List.of(
-                new DestinationOnMapDto(UUID.randomUUID(), 50.7636, 5.5273, "maison en foret","tres tres jolie maison en foret avec les ours", "host", List.of("https://www.houseplans.net/uploads/plans/32005/elevations/88909-768.jpg", "https://casaeconstrucao.org/wp-content/uploads/2020/03/casas-baratas-tiny-house-no-jardim.jpg")),
-                new DestinationOnMapDto(UUID.randomUUID(), 50.66036, 5.5993, "acrobranche","acrobranche AGILE dans les arbres", "activity", List.of("https://ecopark-adventures.com/wp-content/uploads/2019/07/HP-Main-picture-Tournai-e1580480117562.jpg")));
+    @GetMapping("/search")
+    public ResponseEntity<List<DestinationOnSearchDto>> searchDestination(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) List<String> tags,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
 
-        return new ResponseEntity<>(destinationOnMapTEMP, HttpStatus.OK);
+        //critère récupérer de l'url
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setQuery(query);
+        searchCriteria.setTags(tags);
+        searchCriteria.setType(type);
+        searchCriteria.setPage(page);
+        searchCriteria.setSize(size);
+
+        List<DestinationOnSearchDto> destinations = destinationService.searchDestinations(searchCriteria);
+        return new ResponseEntity<>(destinations, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
