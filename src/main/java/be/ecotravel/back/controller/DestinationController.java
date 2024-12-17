@@ -3,7 +3,10 @@ package be.ecotravel.back.controller;
 import be.ecotravel.back.destination.dto.DestinationOnMapDto;
 import be.ecotravel.back.destination.dto.DestinationCreationDto;
 import be.ecotravel.back.entity.Destination;
+import be.ecotravel.back.review.dto.ReviewCreationDto;
+import be.ecotravel.back.service.CloudinaryService;
 import be.ecotravel.back.service.DestinationService;
+import be.ecotravel.back.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +20,14 @@ import java.util.UUID;
 public class DestinationController {
 
     private final DestinationService destinationService;
+    private final ReviewService reviewService;
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
-    public DestinationController(DestinationService destinationService) {
+    public DestinationController(DestinationService destinationService, ReviewService reviewService, CloudinaryService cloudinaryService) {
         this.destinationService = destinationService;
+        this.reviewService = reviewService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @GetMapping("/popular-destination")
@@ -56,5 +63,15 @@ public class DestinationController {
     public ResponseEntity<UUID> postDestination(@RequestBody DestinationCreationDto destinationDto) {
         UUID destinationId = destinationService.createDestination(destinationDto);
         return new ResponseEntity<>(destinationId, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/reviews/{id}")
+    public void getReviews() {
+        //TODO
+    }
+
+    @PostMapping("/post-review")
+    public void postReview(@RequestBody ReviewCreationDto reviewDto) {
+        reviewService.createReview(reviewDto);
     }
 }
