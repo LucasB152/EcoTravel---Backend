@@ -51,5 +51,4 @@ public class GlobalExceptionHandler {
         response.put("timestamp", LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
-
 }

@@ -2,6 +2,7 @@ package be.ecotravel.back.controller;
 
 import be.ecotravel.back.service.UserService;
 import be.ecotravel.back.user.dto.UserCreationDto;
+import be.ecotravel.back.user.dto.UserPasswordModificationDto;
 import be.ecotravel.back.user.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,29 +23,23 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
-        try {
-            UserResponse response = userService.getUserById(id);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        UserResponse response = userService.getUserById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> putUserById(@PathVariable String id, @RequestBody UserCreationDto registerUserDto){
-        try {
-            return ResponseEntity.status(201).body(userService.putUserById(id, registerUserDto));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
+    public ResponseEntity<?> putUserById(@PathVariable String id, @RequestBody UserCreationDto userDto) {
+        return ResponseEntity.status(201).body(userService.putUserById(id, userDto));
+    }
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<?> putPasswordById(@PathVariable String id, @RequestBody UserPasswordModificationDto userDto){
+        userService.modifyPassword(userDto);
+        return null;
     }
 
     @PostMapping("/picture/{id}")
-    public ResponseEntity<?> postProfilePicture(@PathVariable String id, @RequestParam("file") MultipartFile file){
-        try {
-            return ResponseEntity.ok(userService.addProfilePicture(id, file));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erreur lors de l'upload : " + e.getMessage());
-        }
+    public ResponseEntity<?> postProfilePicture(@PathVariable String id, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(userService.addProfilePicture(id, file));
     }
 }
