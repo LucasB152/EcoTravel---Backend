@@ -24,7 +24,7 @@ public class Address {
     private String street;
 
     @Setter
-    private int number;
+    private String number;
 
     @Setter
     private String postalCode;
@@ -38,16 +38,14 @@ public class Address {
     protected Address() {}
 
     public Address(
-            UUID id,
             String country,
             String location,
             String street,
-            int number,
+            String number,
             String postalCode,
             long longitude,
             long latitude
     ) {
-        this.id = id;
         this.country = country;
         this.location = location;
         this.street = street;

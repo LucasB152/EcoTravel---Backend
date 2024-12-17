@@ -46,11 +46,11 @@ public class DataLoader implements CommandLineRunner {
 
         if (destinationRepo.count() != typeValues.length) {
             for (DestinationTypeEnum destinationType : typeValues) {
-                if (destinationRepo.existsByName(destinationType.name())) {
+                if (destinationRepo.existsByType(destinationType)) {
                     continue;
                 }
 
-                destinationRepo.save(new DestinationType(destinationType.name()));
+                destinationRepo.save(new DestinationType(destinationType));
             }
         }
     }
