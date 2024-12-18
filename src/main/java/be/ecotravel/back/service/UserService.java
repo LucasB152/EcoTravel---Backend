@@ -107,9 +107,18 @@ public class UserService {
     public UserResponse putUserById(String id, UserCreationDto registerUserDto) { //TODO Changer ça avec le front pour avoir une bonne dto distincte et pas garder celle de la creation
         User user = findUserById(id);
 
-        user.setEmail(registerUserDto.email());
-        user.setFirstName(registerUserDto.firstname());
-        user.setLastName(registerUserDto.lastname());
+
+        if (registerUserDto.email() != null) { //TODO Faire en sorte que les annotations des dtos puissent fonctionner directement pour améliorer l'expension de l'app
+            user.setEmail(registerUserDto.email());
+        }
+
+        if (registerUserDto.firstname() != null) {
+            user.setFirstName(registerUserDto.firstname());
+        }
+
+        if (registerUserDto.lastname() != null) {
+            user.setLastName(registerUserDto.lastname());
+        }
 
         userRepository.save(user);
         return userMapper.toResponse(user);
