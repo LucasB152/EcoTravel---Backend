@@ -26,8 +26,10 @@ import java.util.UUID;
 public class UserService {
 
     public final CloudinaryService cloudinaryService;
+
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepo;
+
     private final UserMapper userMapper;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
@@ -72,15 +74,14 @@ public class UserService {
 
     public boolean isUserVerified(UUID userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(EntityNotFoundException::new); // On donne pas d'info pour des raisons de sécurité
 
         return user.isActivated();
     }
 
-    public void activateUser(String token) {
-        String userId = tokenService.extractUsername(token);
-        User user = userRepository.findById(UUID.fromString(userId))
-                .orElseThrow(EntityNotFoundException::new);
+    public void activateUser(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException::new); // On donne pas d'info pour des raisons de sécurité
 
         user.setActivated(true);
         userRepository.save(user);
@@ -94,11 +95,12 @@ public class UserService {
 
     public UserResponse getUserById(String id) throws EntityNotFoundException {
         User user = findUserById(id);
-        return new UserResponse(user.getFirstname(), user.getLastname(), user.getUsername(), user.getProfilePicturePath());
+        return new UserResponse(user.getFirstName(), user.getLastName(), user.getUsername(), user.getProfilePicturePath());
     }
 
     private User findUserById(String id) throws EntityNotFoundException {
         UUID uuid = UUID.fromString(id);
+
         return userRepository.findUserById(uuid)
                 .orElseThrow(EntityNotFoundException::new);
     }
@@ -109,12 +111,15 @@ public class UserService {
         if (registerUserDto.email() != null && !registerUserDto.email().equals(user.getEmail())) {
             user.setEmail(registerUserDto.email());
         }
-        if (registerUserDto.firstname() != null && !registerUserDto.firstname().equals(user.getFirstname())) {
-            user.setFirstname(registerUserDto.firstname());
+
+        if (registerUserDto.firstName() != null && !registerUserDto.firstName().equals(user.getFirstName())) {
+            user.setFirstName(registerUserDto.firstName());
         }
-        if (registerUserDto.lastname() != null && !registerUserDto.lastname().equals(user.getLastname())) {
-            user.setLastname(registerUserDto.lastname());
+
+        if (registerUserDto.lastName() != null && !registerUserDto.lastName().equals(user.getLastName())) {
+            user.setLastName(registerUserDto.lastName());
         }
+
         userRepository.save(user);
         return getUserById(id);
     }

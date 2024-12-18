@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -41,5 +42,7 @@ public class Destination {
     @ManyToOne(optional = false)
     private Address address;
 
-    public Destination() {}
+    @ManyToMany
+    private Set<Tag> tags;
+
 }

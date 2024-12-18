@@ -1,6 +1,5 @@
 package be.ecotravel.back.service;
 
-import be.ecotravel.back.entity.User;
 import be.ecotravel.back.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

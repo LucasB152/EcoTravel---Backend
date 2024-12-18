@@ -37,7 +37,7 @@ public class TokenService {
 
     public String generateToken(UUID userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find user with id: " + userId));
+                .orElseThrow(EntityNotFoundException::new);
 
         return generateToken(new HashMap<>(), user);
     }
