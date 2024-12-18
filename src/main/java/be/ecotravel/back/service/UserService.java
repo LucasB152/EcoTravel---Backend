@@ -18,7 +18,6 @@ import be.ecotravel.back.user.dto.UserResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -95,7 +94,7 @@ public class UserService {
 
     public UserResponse getUserById(String id) throws EntityNotFoundException {
         User user = findUserById(id);
-        return new UserResponse(user.getFirstName(), user.getLastName(), user.getUsername(), user.getProfilePicturePath());
+        return userMapper.toResponse(user);
     }
 
     private User findUserById(String id) throws EntityNotFoundException {
@@ -105,48 +104,45 @@ public class UserService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public UserResponse putUserById(String id, UserCreationDto registerUserDto) {
+    public UserResponse putUserById(String id, UserCreationDto registerUserDto) { //TODO Changer ça avec le front pour avoir une bonne dto distincte et pas garder celle de la creation
         User user = findUserById(id);
 
-        if (registerUserDto.email() != null && !registerUserDto.email().equals(user.getEmail())) {
-            user.setEmail(registerUserDto.email());
-        }
-
-        if (registerUserDto.firstName() != null && !registerUserDto.firstName().equals(user.getFirstName())) {
-            user.setFirstName(registerUserDto.firstName());
-        }
-
-        if (registerUserDto.lastName() != null && !registerUserDto.lastName().equals(user.getLastName())) {
-            user.setLastName(registerUserDto.lastName());
-        }
+        user.setEmail(registerUserDto.email());
+        user.setFirstName(registerUserDto.firstname());
+        user.setLastName(registerUserDto.lastname());
 
         userRepository.save(user);
-        return getUserById(id);
+        return userMapper.toResponse(user);
     }
 
     public UserResponse addProfilePicture(String id, MultipartFile file) {
-        String imageUrl = null;
+        String imageUrl;
+
         try {
             imageUrl = cloudinaryService.uploadImageToFolder(file, "userPicture", id+"_"+ System.currentTimeMillis());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); //TODO gérer l'exception pour retourner au front
         }
+
         User user = findUserById(id);
         if (user.getProfilePicturePath() != null) {
             cloudinaryService.deleteImageByUrl(user.getProfilePicturePath());
         }
+
         user.setProfilePicturePath(imageUrl);
         userRepository.save(user);
-        return getUserById(id);
+
+        return userMapper.toResponse(user);
     }
 
     public void modifyPassword(UserPasswordModificationDto userDto) {
-        Optional<User> user = userRepository.findById(UUID.fromString(userDto.userId()));
-        if (user.isEmpty() || !passwordEncoder.matches(userDto.currentPassword(), user.get().getPassword())) {
+        User user = findUserById(userDto.userId());
+
+        if (!passwordEncoder.matches(userDto.currentPassword(), user.getPassword())) {
             throw new AuthenticationException("Password is not correct");
         }
-        user.get().setPassword(passwordEncoder.encode(userDto.newPassword()));
-        userRepository.save(user.get());
 
+        user.setPassword(passwordEncoder.encode(userDto.newPassword()));
+        userRepository.save(user);
     }
 }

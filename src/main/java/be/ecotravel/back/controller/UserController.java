@@ -26,12 +26,12 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
         UserResponse response = userService.getUserById(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> putUserById(@PathVariable String id, @RequestBody UserCreationDto userDto) {
-        return ResponseEntity.status(201).body(userService.putUserById(id, userDto));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.putUserById(id, userDto));
     }
 
     @PutMapping("/{id}/password")
