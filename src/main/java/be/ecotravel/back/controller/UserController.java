@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @RequestMapping("api/user")
 @RestController
 public class UserController {
@@ -33,9 +35,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}/password")
-    public ResponseEntity<?> putPasswordById(@PathVariable String id, @RequestBody UserPasswordModificationDto userDto){
+    public ResponseEntity<?> putPasswordById(@PathVariable String id, @RequestBody UserPasswordModificationDto userDto) {
         userService.modifyPassword(userDto);
-        return null;
+        return ResponseEntity.ok(Map.of("Message", "Password changed with success"));
     }
 
     @PostMapping("/picture/{id}")

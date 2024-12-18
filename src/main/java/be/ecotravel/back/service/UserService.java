@@ -3,6 +3,7 @@ package be.ecotravel.back.service;
 import be.ecotravel.back.entity.User;
 import be.ecotravel.back.entity.UserRole;
 import be.ecotravel.back.entity.UserRoleEnum;
+import be.ecotravel.back.exception.AuthenticationException;
 import be.ecotravel.back.repository.UserRepository;
 import be.ecotravel.back.repository.UserRoleRepository;
 import be.ecotravel.back.user.dto.UserCreationDto;
@@ -11,11 +12,14 @@ import be.ecotravel.back.user.mapper.UserMapper;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import be.ecotravel.back.user.dto.UserResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,7 +29,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepo;
     private final UserMapper userMapper;
-    private TokenService tokenService;
+    private final TokenService tokenService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(
@@ -33,13 +38,15 @@ public class UserService {
             UserRoleRepository userRoleRepo,
             UserMapper userMapper,
             CloudinaryService cloudinaryService,
-            TokenService tokenService
+            TokenService tokenService,
+            PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepo;
         this.userRoleRepo = userRoleRepo;
         this.userMapper = userMapper;
         this.cloudinaryService = cloudinaryService;
         this.tokenService = tokenService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UUID createUser(UserCreationDto userDto, String hashedPassword) {
@@ -85,18 +92,18 @@ public class UserService {
 
     }
 
-    public UserResponse getUserById (String id) throws EntityNotFoundException {
+    public UserResponse getUserById(String id) throws EntityNotFoundException {
         User user = findUserById(id);
         return new UserResponse(user.getFirstname(), user.getLastname(), user.getUsername(), user.getProfilePicturePath());
     }
 
-    private User findUserById (String id) throws EntityNotFoundException {
+    private User findUserById(String id) throws EntityNotFoundException {
         UUID uuid = UUID.fromString(id);
         return userRepository.findUserById(uuid)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public UserResponse putUserById (String id, UserCreationDto registerUserDto){
+    public UserResponse putUserById(String id, UserCreationDto registerUserDto) {
         User user = findUserById(id);
 
         if (registerUserDto.email() != null && !registerUserDto.email().equals(user.getEmail())) {
@@ -112,22 +119,29 @@ public class UserService {
         return getUserById(id);
     }
 
-    public UserResponse addProfilePicture (String id, MultipartFile file) {
+    public UserResponse addProfilePicture(String id, MultipartFile file) {
         String imageUrl = null;
         try {
-            imageUrl = cloudinaryService.uploadImageToFolder(file, "userPicture", id);
+            imageUrl = cloudinaryService.uploadImageToFolder(file, "userPicture", id+"_"+ System.currentTimeMillis());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         User user = findUserById(id);
-        if (user.getProfilePicturePath() == null) {
-            user.setProfilePicturePath(imageUrl);
+        if (user.getProfilePicturePath() != null) {
+            cloudinaryService.deleteImageByUrl(user.getProfilePicturePath());
         }
+        user.setProfilePicturePath(imageUrl);
         userRepository.save(user);
         return getUserById(id);
     }
 
     public void modifyPassword(UserPasswordModificationDto userDto) {
+        Optional<User> user = userRepository.findById(UUID.fromString(userDto.userId()));
+        if (user.isEmpty() || !passwordEncoder.matches(userDto.currentPassword(), user.get().getPassword())) {
+            throw new AuthenticationException("Password is not correct");
+        }
+        user.get().setPassword(passwordEncoder.encode(userDto.newPassword()));
+        userRepository.save(user.get());
 
     }
 }

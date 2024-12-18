@@ -72,4 +72,29 @@ public class CloudinaryService {
 
         return imageUrls;
     }
+
+    public boolean deleteImageByUrl(String imageUrl) {
+        try {
+            String publicId = extractPublicIdFromUrl(imageUrl);
+
+            Map response = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+
+            return "ok".equals(response.get("result"));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    private String extractPublicIdFromUrl(String imageUrl) {
+        String baseUrl = "https://res.cloudinary.com/" + cloudName + "/image/upload/";
+        if (imageUrl.startsWith(baseUrl)) {
+            String publicIdWithExtension = imageUrl.substring(baseUrl.length());
+
+            int dotIndex = publicIdWithExtension.lastIndexOf('.');
+            return (dotIndex != -1) ? publicIdWithExtension.substring(0, dotIndex) : publicIdWithExtension;
+        }
+        throw new IllegalArgumentException("URL invalide : " + imageUrl);
+    }
+
 }
