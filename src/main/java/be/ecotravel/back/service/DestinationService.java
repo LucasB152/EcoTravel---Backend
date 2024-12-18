@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -55,6 +56,7 @@ public class DestinationService {
      */
     public List<DestinationOnSearchDto> searchDestinations(SearchCriteria searchCriteria) {
         //TODO Implementer la recherche
+
         List<DestinationOnSearchDto> TEMPDestinationAll = List.of(
                 new DestinationOnSearchDto(
                         UUID.randomUUID(),
@@ -63,7 +65,7 @@ public class DestinationService {
                         50.7636,
                         5.5273,
                         "rue de la foret, 1 4000 Liege",
-                        "host",
+                        "LODGING",
                         List.of("https://www.houseplans.net/uploads/plans/32005/elevations/88909-768.jpg","https://casaeconstrucao.org/wp-content/uploads/2020/03/casas-baratas-tiny-house-no-jardim.jpg"),
                         List.of("wifi", "swimmpool", "all-in", "no pet", "no smoke")
                 ),
@@ -74,7 +76,7 @@ public class DestinationService {
                         50.66036,
                         5.5993,
                         "rue de l'arbre, 37 4000 Visé",
-                        "activity",
+                        "ACTIVITY",
                         List.of("https://ecopark-adventures.com/wp-content/uploads/2019/07/HP-Main-picture-Tournai-e1580480117562.jpg"),
                         List.of("wifi", "swimmpool", "all-in", "no pet", "no smoke")
                 ),
@@ -85,7 +87,7 @@ public class DestinationService {
                         50.7336,
                         5.2273,
                         "rue de l'hotel, 24 4671 Saive",
-                        "host",
+                        "LODGING",
                         List.of("https://casaeconstrucao.org/wp-content/uploads/2020/03/casas-baratas-tiny-house-no-jardim.jpg"),
                         List.of("wifi", "no pet", "no smoke")
                 ),
@@ -96,7 +98,7 @@ public class DestinationService {
                         50.46036,
                         5.4993,
                         "avenue de la meuse, 37 4000 Liege",
-                        "activity",
+                        "ACTIVITY",
                         List.of("https://ecopark-adventures.com/wp-content/uploads/2019/07/HP-Main-picture-Tournai-e1580480117562.jpg"),
                         List.of("no pet", "no smoke")
                 ),
@@ -107,7 +109,7 @@ public class DestinationService {
                         51.0336,
                         5.0273,
                         "rue de l'hotel, 25 4671 Saive",
-                        "host",
+                        "LODGING",
                         List.of("https://casaeconstrucao.org/wp-content/uploads/2020/03/casas-baratas-tiny-house-no-jardim.jpg"),
                         List.of("wifi", "no pet", "no smoke")
                 )
@@ -116,8 +118,11 @@ public class DestinationService {
         List<DestinationOnSearchDto> TEMPDestination = null;
 
         //recherche TEMPORAIRE:
-        if(searchCriteria.getType() != "both"){
-            TEMPDestination = TEMPDestinationAll.stream().filter(destination -> destination.getType().equals(searchCriteria.getType())).toList();
+
+        if(Objects.equals(searchCriteria.getType(), "LODGING")){
+            TEMPDestination = TEMPDestinationAll.stream().filter(destination -> destination.getType().equals("LODGING")).toList();
+        }else if(Objects.equals(searchCriteria.getType(), "ACTIVITY")){
+            TEMPDestination = TEMPDestinationAll.stream().filter(destination -> destination.getType().equals("ACTIVITY")).toList();
         }else{
             TEMPDestination = TEMPDestinationAll;
         }
