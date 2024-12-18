@@ -49,7 +49,7 @@ public class RequestService {
 
         for (Request request : requests) {
             User user = request.getUser();
-            String fullName = user.getFirstName() + " " + user.getLastName();
+            String fullName = user.getFirstname() + " " + user.getLastname();
             String status = request.getStatus().name();
 
             RequestResponseDto requestResponseDto = requestMapper.toResponseDto(request, fullName, status);
