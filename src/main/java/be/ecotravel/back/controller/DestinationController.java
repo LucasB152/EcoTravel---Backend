@@ -1,6 +1,8 @@
 package be.ecotravel.back.controller;
 
 import be.ecotravel.back.destination.dto.DestinationCreationDto;
+import be.ecotravel.back.destination.dto.DestinationOnSearchDto;
+import be.ecotravel.back.destination.dto.SearchCriteria;
 import be.ecotravel.back.entity.Destination;
 import be.ecotravel.back.service.CloudinaryService;
 import be.ecotravel.back.service.DestinationService;
@@ -29,6 +31,26 @@ public class DestinationController {
     public ResponseEntity<List<Destination>> destinations() {
         List<Destination> popularDestination = this.destinationService.getPopular();
         return new ResponseEntity<>(popularDestination, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<DestinationOnSearchDto>> searchDestination(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) List<String> tags,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+
+        //critère récupérer de l'url
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setQuery(query);
+        searchCriteria.setTags(tags);
+        searchCriteria.setType(type);
+        searchCriteria.setPage(page);
+        searchCriteria.setSize(size);
+
+        List<DestinationOnSearchDto> destinations = destinationService.searchDestinations(searchCriteria);
+        return new ResponseEntity<>(destinations, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
