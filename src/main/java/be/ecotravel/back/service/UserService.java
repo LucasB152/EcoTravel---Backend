@@ -30,7 +30,6 @@ public class UserService {
     private final UserRoleRepository userRoleRepo;
 
     private final UserMapper userMapper;
-    private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -39,14 +38,12 @@ public class UserService {
             UserRoleRepository userRoleRepo,
             UserMapper userMapper,
             CloudinaryService cloudinaryService,
-            TokenService tokenService,
             PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepo;
         this.userRoleRepo = userRoleRepo;
         this.userMapper = userMapper;
         this.cloudinaryService = cloudinaryService;
-        this.tokenService = tokenService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -106,18 +103,22 @@ public class UserService {
 
     public UserResponse putUserById(String id, UserCreationDto registerUserDto) { //TODO Changer ça avec le front pour avoir une bonne dto distincte et pas garder celle de la creation
         User user = findUserById(id);
-
+        Optional<User> userFromDb = userRepository.findByEmail(registerUserDto.email());
 
         if (registerUserDto.email() != null) { //TODO Faire en sorte que les annotations des dtos puissent fonctionner directement pour améliorer l'expension de l'app
-            user.setEmail(registerUserDto.email());
+            if(userFromDb.isEmpty() || userFromDb.get() == user){
+                user.setEmail(registerUserDto.email());
+            }else{
+                throw new EntityExistsException("This email is already linked to an account");
+            }
         }
 
-        if (registerUserDto.firstname() != null) {
-            user.setFirstName(registerUserDto.firstname());
+        if (registerUserDto.firstName() != null) {
+            user.setFirstName(registerUserDto.firstName());
         }
 
-        if (registerUserDto.lastname() != null) {
-            user.setLastName(registerUserDto.lastname());
+        if (registerUserDto.lastName() != null) {
+            user.setLastName(registerUserDto.lastName());
         }
 
         userRepository.save(user);

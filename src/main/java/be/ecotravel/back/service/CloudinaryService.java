@@ -73,28 +73,40 @@ public class CloudinaryService {
         return imageUrls;
     }
 
-    public boolean deleteImageByUrl(String imageUrl) {
+    public void deleteImageByUrl(String imageUrl) {
+        String publicId = extractPublicIdFromUrl(imageUrl);
+
+        Map<String, Object> deleteResult = null;
         try {
-            String publicId = extractPublicIdFromUrl(imageUrl);
+            deleteResult = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
 
-            Map response = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
-
-            return "ok".equals(response.get("result"));
-        } catch (Exception e) {
-            return false;
+        String result = (String) deleteResult.get("result");
+        if (!"ok".equals(result)) {
+            System.out.println("Erreur lors de la suppression de l'image : " + result);
         }
     }
 
 
     private String extractPublicIdFromUrl(String imageUrl) {
         String baseUrl = "https://res.cloudinary.com/" + cloudName + "/image/upload/";
-        if (imageUrl.startsWith(baseUrl)) {
-            String publicIdWithExtension = imageUrl.substring(baseUrl.length());
 
-            int dotIndex = publicIdWithExtension.lastIndexOf('.');
-            return (dotIndex != -1) ? publicIdWithExtension.substring(0, dotIndex) : publicIdWithExtension;
+        if (imageUrl.startsWith(baseUrl)) {
+            String pathWithVersionAndExtension = imageUrl.substring(baseUrl.length());
+
+            int firstSlashIndex = pathWithVersionAndExtension.indexOf('/');
+            if (firstSlashIndex != -1) {
+                String pathWithoutVersion = pathWithVersionAndExtension.substring(firstSlashIndex + 1);
+
+                int dotIndex = pathWithoutVersion.lastIndexOf('.');
+                return (dotIndex != -1) ? pathWithoutVersion.substring(0, dotIndex) : pathWithoutVersion;
+            }
         }
+
         throw new IllegalArgumentException("URL invalide : " + imageUrl);
     }
+
 
 }

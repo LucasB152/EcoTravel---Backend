@@ -30,7 +30,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    private boolean activated;
+    private boolean activated = false;
 
     @ManyToOne(optional = false)
     private UserRole userRole = new UserRole();

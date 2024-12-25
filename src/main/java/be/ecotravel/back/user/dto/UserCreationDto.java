@@ -9,10 +9,10 @@ public record UserCreationDto(
         String email,
         @NotNull(message = "Firstname cannot be null")
         @NotBlank(message = "Firstname cannot be blank")
-        String firstname,
+        String firstName,
         @NotNull(message = "Lastname cannot be null")
         @NotBlank(message = "Lastname cannot be blank")
-        String lastname,
+        String lastName,
         /*@NotNull(message = "Password cannot be null")
         @NotBlank(message = "Password cannot be blank")*/ //TODO Rajouter ceci une fois que le reste de putUser est fait
         String password

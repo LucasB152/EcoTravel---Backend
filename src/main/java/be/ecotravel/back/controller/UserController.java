@@ -26,12 +26,13 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
         UserResponse response = userService.getUserById(id);
-        return new ResponseEntity<>(response, HttpStatus.FOUND);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> putUserById(@PathVariable String id, @RequestBody UserCreationDto userDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.putUserById(id, userDto));
+        userService.putUserById(id, userDto);
+        return ResponseEntity.ok(Map.of("Message", "Informations changed with success"));
     }
 
     @PutMapping("/{id}/password")
