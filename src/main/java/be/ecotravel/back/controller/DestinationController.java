@@ -41,15 +41,9 @@ public class DestinationController {
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
 
-        //critère récupérer de l'url
-        SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setQuery(query);
-        searchCriteria.setTags(tags);
-        searchCriteria.setType(type);
-        searchCriteria.setPage(page);
-        searchCriteria.setSize(size);
-
+        SearchCriteria searchCriteria = new SearchCriteria(query, tags, type, page, size);
         List<DestinationOnSearchDto> destinations = destinationService.searchDestinations(searchCriteria);
+        System.out.println("[DEBUG] destinationController :" + destinations);
         return new ResponseEntity<>(destinations, HttpStatus.OK);
     }
 
