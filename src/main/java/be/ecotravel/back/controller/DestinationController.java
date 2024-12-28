@@ -43,7 +43,6 @@ public class DestinationController {
 
         SearchCriteria searchCriteria = new SearchCriteria(query, tags, type, page, size);
         List<DestinationOnSearchDto> destinations = destinationService.searchDestinations(searchCriteria);
-        System.out.println("[DEBUG] destinationController :" + destinations);
         return new ResponseEntity<>(destinations, HttpStatus.OK);
     }
 

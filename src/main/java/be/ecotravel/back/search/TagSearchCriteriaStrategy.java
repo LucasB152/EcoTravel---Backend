@@ -16,9 +16,9 @@ public class TagSearchCriteriaStrategy implements SearchCriteriaStrategy {
 
     @Override
     public boolean matches(Destination destination) {
-        return true;
-//        System.out.println("[DEBUG] destination.getTags() = " + destination.getTag().size() + destination.getTag());
-//        System.out.println("[DEBUG] tags = " + tags.size() + tags);
-//      return destination.getTag().stream().anyMatch(tag -> tags.contains(tag.getName()));
+        if (tags == null) {
+            return true;
+        }
+        return this.tags.stream().allMatch(tag -> destination.getTag().stream().anyMatch(t -> t.getName().equals(tag)));
     }
 }
