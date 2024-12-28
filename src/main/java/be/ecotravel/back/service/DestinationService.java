@@ -4,10 +4,7 @@ import be.ecotravel.back.destination.dto.DestinationCreationDto;
 import be.ecotravel.back.destination.dto.DestinationOnSearchDto;
 import be.ecotravel.back.destination.dto.SearchCriteria;
 import be.ecotravel.back.destination.mapper.DestinationMapper;
-import be.ecotravel.back.entity.Destination;
-import be.ecotravel.back.entity.DestinationType;
-import be.ecotravel.back.entity.DestinationTypeEnum;
-import be.ecotravel.back.entity.User;
+import be.ecotravel.back.entity.*;
 import be.ecotravel.back.repository.DestinationRepository;
 import be.ecotravel.back.repository.DestinationTypeRepository;
 import be.ecotravel.back.repository.UserRepository;
@@ -63,7 +60,6 @@ public class DestinationService {
         );
 
         List<Destination> destinations = searchService.search(criteriaList);
-        System.out.println("[DEBUG] " + destinations);
         //todo: utiliser un mapper
         return destinations.stream()
                 .map(destination -> new DestinationOnSearchDto(
@@ -74,8 +70,8 @@ public class DestinationService {
                         destination.getAddress().getLongitude(),
                         destination.getAddress().getStreet(),
                         destination.getDestinationType().getType().name(),
-                        List.of("image1", "image2", "image3"),
-                        destination.getTags().stream().map(tag -> tag.getName()).collect(Collectors.toList())
+                        List.of(destination.getImageFolderPath(), "image2", "image3"),
+                        destination.getTag().stream().map(Tag::getName).collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
 

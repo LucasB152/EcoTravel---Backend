@@ -15,6 +15,7 @@ public class QuerySearchCriteriaStrategy implements SearchCriteriaStrategy {
 
     @Override
     public boolean matches(Destination destination) {
-        return destination.getName().contains(query) || destination.getDescription().contains(query);
+        return true;
+//        return destination.getName().contains(query) || destination.getDescription().contains(query);
     }
 }

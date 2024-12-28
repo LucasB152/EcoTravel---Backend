@@ -3,6 +3,8 @@ package be.ecotravel.back.search;
 
 import be.ecotravel.back.entity.Destination;
 
+import java.util.Objects;
+
 /**
  * ConcreteStrategies du DP strategy des critères de recherche
  */
@@ -15,6 +17,6 @@ public class TypeSearchCriteriaStrategy implements SearchCriteriaStrategy {
 
     @Override
     public boolean matches(Destination destination) {
-        return destination.getDestinationType().getType().name().equals(type);
+        return !Objects.equals(this.type, "ACTIVITY") && !Objects.equals(this.type, "LODGING") || destination.getDestinationType().getType().name().equals(type);
     }
 }
