@@ -19,6 +19,7 @@ public class Destination {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String price;
@@ -43,6 +44,6 @@ public class Destination {
     private Address address;
 
     @ManyToMany
-    private Set<Tag> tags;
+    private Set<Tag> tag;
 
 }

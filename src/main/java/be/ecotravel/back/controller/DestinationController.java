@@ -67,4 +67,10 @@ public class DestinationController {
         UUID destinationId = destinationService.createDestination(destinationDto);
         return new ResponseEntity<>(destinationId, HttpStatus.CREATED);
     }
+
+    @GetMapping("/types")
+    public ResponseEntity<List<String>> getDestinationTypes() {
+        List<String> types = destinationService.getDestinationTypes();
+        return new ResponseEntity<>(types, HttpStatus.OK);
+    }
 }

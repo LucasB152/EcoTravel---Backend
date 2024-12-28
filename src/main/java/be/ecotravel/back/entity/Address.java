@@ -23,30 +23,12 @@ public class Address {
 
     private String number;
 
-    private String postalCode;
+    private String zipcode;
 
     private double longitude;
 
     private double latitude;
 
-    protected Address() {}
-
-    public Address(
-            String country,
-            String location,
-            String street,
-            String number,
-            String postalCode,
-            double longitude,
-            double latitude
-    ) {
-        this.country = country;
-        this.location = location;
-        this.street = street;
-        this.number = number;
-        this.postalCode = postalCode;
-        this.longitude = longitude;
-        this.latitude = latitude;
-    }
+    public Address() {}
 
 }
