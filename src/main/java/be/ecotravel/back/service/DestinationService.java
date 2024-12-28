@@ -1,7 +1,8 @@
 package be.ecotravel.back.service;
 
 import be.ecotravel.back.destination.dto.DestinationCreationDto;
-import be.ecotravel.back.destination.dto.DestinationOnSearchDto;
+import be.ecotravel.back.destination.dto.DestinationAllOnSearchDto;
+import be.ecotravel.back.destination.dto.DestinationDetailsDto;
 import be.ecotravel.back.destination.dto.SearchCriteria;
 import be.ecotravel.back.destination.mapper.DestinationMapper;
 import be.ecotravel.back.entity.*;
@@ -51,7 +52,7 @@ public class DestinationService {
     /**
      * Client de la stratégie de recherche
      */
-    public List<DestinationOnSearchDto> searchDestinations(SearchCriteria searchCriteria) {
+    public List<DestinationAllOnSearchDto> searchDestinations(SearchCriteria searchCriteria) {
 
         List<SearchCriteriaStrategy> criteriaList = List.of(
                 new QuerySearchCriteriaStrategy(searchCriteria.query()),
@@ -60,25 +61,37 @@ public class DestinationService {
         );
 
         List<Destination> destinations = searchService.search(criteriaList);
-        //todo: utiliser un mapper
+
+        //todo a peut etre changer
         return destinations.stream()
-                .map(destination -> new DestinationOnSearchDto(
-                        destination.getId(),
-                        destination.getName(),
-                        destination.getDescription(),
-                        destination.getAddress().getLatitude(),
-                        destination.getAddress().getLongitude(),
-                        destination.getAddress().getStreet(),
-                        destination.getDestinationType().getType().name(),
-                        List.of(destination.getImageFolderPath(), "image2", "image3"),
-                        destination.getTag().stream().map(Tag::getName).collect(Collectors.toList())
+                .map(destination -> new DestinationAllOnSearchDto(
+                        destination.getId()
                 ))
                 .collect(Collectors.toList());
-
     }
 
-    public Destination getDestinationById(UUID id) {
-        return destinationRepo.findById(id).orElse(null);
+    public DestinationDetailsDto getDestinationDetails(UUID id) {
+        Destination destination = destinationRepo.findById(id).orElse(null);
+
+        if (destination == null) {
+            return null;
+        }
+
+        //todo utiliser un mapper
+        return new DestinationDetailsDto(
+                destination.getId(),
+                destination.getName(),
+                destination.getDescription(),
+                destination.getPrice(),
+                destination.getCapacity(),
+                destination.getContactPhone(),
+                destination.getContactEmail(),
+                List.of(destination.getImageFolderPath()),
+                destination.getDestinationType().getType().name(),
+                destination.getAddress().toString(),
+                destination.getTag().stream().map(Tag::getName).collect(Collectors.toList()),
+                destination.isVisible()
+        );
     }
 
     public UUID createDestination(DestinationCreationDto destinationDto) {
