@@ -6,7 +6,7 @@ public record AddressCreationDto(
     String street,
     String number,
     String postalCode,
-    long longitude,
-    long latitude
+    double longitude,
+    double latitude
 ) {
 }

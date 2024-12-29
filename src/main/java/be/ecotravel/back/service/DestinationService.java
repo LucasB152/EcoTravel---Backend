@@ -54,6 +54,19 @@ public class DestinationService {
      */
     public List<DestinationAllOnSearchDto> searchDestinations(SearchCriteria searchCriteria) {
 
+        //debug a suppr
+        //AddressCreationDto addressCreationDto = null;
+        //        if (searchCriteria.query() != null && !searchCriteria.query().isEmpty()) {
+        //            try {
+        //                GeocodingResult[] results = googleMapsService.geocodeAddress(searchCriteria.query());
+        //                if (results.length > 0) {
+        //                    addressCreationDto = googleMapsService.getAddressCreationDto(results[0]);
+        //                }
+        //            } catch (Exception e) {
+        //                e.printStackTrace();
+        //            }
+        //        }
+
         List<SearchCriteriaStrategy> criteriaList = List.of(
                 new QuerySearchCriteriaStrategy(searchCriteria.query()),
                 new TagSearchCriteriaStrategy(searchCriteria.tags()),
