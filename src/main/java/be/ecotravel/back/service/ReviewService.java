@@ -8,11 +8,16 @@ import be.ecotravel.back.repository.ReviewRepository;
 import be.ecotravel.back.repository.UserRepository;
 import be.ecotravel.back.review.dto.ReviewDeleteDto;
 import be.ecotravel.back.review.dto.ReviewEditDto;
+import be.ecotravel.back.review.dto.ReviewResponseDto;
 import be.ecotravel.back.review.mapper.ReviewMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -32,15 +37,20 @@ public class ReviewService {
     }
 
     public void createReview(ReviewCreationDto reviewDto) {
-        User user = userRepository.getReferenceById(reviewDto.userId());
-        Destination destination = destinationRepository.getReferenceById(reviewDto.destinationId());
+        User user = userRepository.findById(reviewDto.userId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        Destination destination = destinationRepository.findById(reviewDto.destinationId())
+                .orElseThrow(() -> new EntityNotFoundException("Destination not found"));
 
         Review review = reviewMapper.toEntity(reviewDto, user, destination);
         reviewRepository.save(review);
     }
 
     public void editReview(ReviewEditDto reviewDto) {
-        Review review = reviewRepository.getReferenceById(reviewDto.id());
+        Review review = reviewRepository.findById(reviewDto.id())
+                .orElseThrow(() -> new EntityNotFoundException("Review not found"));
+
         User reviewUser = review.getUser();
 
         if (!reviewUser.getId().equals(reviewDto.userId())) {
@@ -57,13 +67,16 @@ public class ReviewService {
     }
 
     public void deleteReview(ReviewDeleteDto reviewDto) {
-        Review review = reviewRepository.getReferenceById(reviewDto.reviewId());
+        Review review = reviewRepository.findById(reviewDto.reviewId())
+                .orElseThrow(() -> new EntityNotFoundException("Review not found"));
+
         User reviewUser = review.getUser();
-        User requestUser = userRepository.getReferenceById(reviewDto.userId());
+
+        User requestUser = userRepository.findById(reviewDto.userId())
+                .orElseThrow(EntityNotFoundException::new);
+
         UserRole requestUserRole = requestUser.getUserRole();
 
-        System.out.println(reviewUser.getId() + " | " + requestUser.getId());
-        System.out.println(reviewUser.getId().equals(requestUser.getId()));
         if (!reviewUser.getId().equals(requestUser.getId())
         && requestUserRole.getName() != UserRoleEnum.ADMIN) {
             throw new AuthenticationException("You are not allowed to delete this review.");
@@ -72,8 +85,20 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-    public void getDestinationReviews() {
-        //TODO
+    public List<ReviewResponseDto> getDestinationReviews(UUID destinationId) {
+        Destination destination = destinationRepository.findById(destinationId)
+                .orElseThrow(() -> new EntityNotFoundException("Destination not found"));
+
+        List<Review> reviews = reviewRepository.findByDestination(destination);
+
+        return reviews.stream()
+                .map(review -> {
+                    User user = review.getUser();
+                    String username = user.getFirstName() + " " + user.getLastName();
+
+                    return reviewMapper.toReviewResponseDto(review, username);
+                })
+                .toList();
     }
 
 }

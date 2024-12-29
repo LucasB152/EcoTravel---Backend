@@ -19,7 +19,8 @@ public interface ReviewMapper {
     @Mapping(target = "destination", source = "destination")
     Review toEntity(ReviewCreationDto reviewDto, User user, Destination destination);
 
-    @Mapping(target = "dateString", source = "review.createdAt", dateFormat = "dd-MM-yyyy HH:mm:ss")
+    @Mapping(target = "dateStringCreation", source = "review.createdAt", dateFormat = "dd-MM-yyyy HH:mm:ss")
+    @Mapping(target = "dateStringModification", source = "review.editedAt", dateFormat = "dd-MM-yyyy HH:mm:ss")
     ReviewResponseDto toReviewResponseDto(Review review, String username);
 
 }
