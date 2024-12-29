@@ -17,10 +17,20 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping("/create-review")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public void createReview(@RequestBody ReviewCreationDto reviewDto) {
         reviewService.createReview(reviewDto);
+    }
+
+    @PutMapping()
+    public void updateReview(@RequestBody ReviewCreationDto reviewDto) {
+
+    }
+
+    @DeleteMapping()
+    public void deleteReview(@RequestBody ReviewCreationDto reviewDto) {
+
     }
 
 }

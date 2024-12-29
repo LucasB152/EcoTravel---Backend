@@ -9,7 +9,7 @@ import java.util.UUID;
 public record ReviewCreationDto(
     @Min(0) @Max(5)
     int score,
-
+    String title,
     String comment,
 
     @NotNull

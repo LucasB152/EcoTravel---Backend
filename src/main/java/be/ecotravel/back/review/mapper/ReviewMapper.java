@@ -12,8 +12,11 @@ import org.mapstruct.Mapping;
 public interface ReviewMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "edited", ignore = true)
+    @Mapping(target = "editedAt", ignore = true)
+    @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "user", source = "user")
+    @Mapping(target = "destination", source = "destination")
     Review toEntity(ReviewCreationDto reviewDto, User user, Destination destination);
 
     @Mapping(target = "dateString", source = "review.createdAt", dateFormat = "dd-MM-yyyy HH:mm:ss")

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 public class Review {
 
@@ -15,16 +16,19 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Setter
+    @Column(nullable = false)
     private int score;
 
-    @Setter
+    private String title;
+
     private String comment;
 
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Setter
     private boolean edited;
+    
+    private LocalDateTime editedAt;
 
     @ManyToOne(optional = false)
     private User user;
@@ -32,7 +36,9 @@ public class Review {
     @ManyToOne(optional = false)
     private Destination destination;
 
-    protected Review() {}
+    public Review() {
+
+    }
 
     @PrePersist
     public void prePersist() {
