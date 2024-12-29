@@ -1,6 +1,7 @@
 package be.ecotravel.back.controller;
 
 import be.ecotravel.back.review.dto.ReviewCreationDto;
+import be.ecotravel.back.review.dto.ReviewDeleteDto;
 import be.ecotravel.back.review.dto.ReviewEditDto;
 import be.ecotravel.back.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,9 @@ public class ReviewController {
     }
 
     @DeleteMapping()
-    public void deleteReview(@RequestBody ReviewCreationDto review) {
-
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteReview(@RequestBody ReviewDeleteDto review) {
+        reviewService.deleteReview(review);
     }
 
 }

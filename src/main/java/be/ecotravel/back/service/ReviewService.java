@@ -1,13 +1,12 @@
 package be.ecotravel.back.service;
 
+import be.ecotravel.back.entity.*;
 import be.ecotravel.back.exception.AuthenticationException;
 import be.ecotravel.back.review.dto.ReviewCreationDto;
-import be.ecotravel.back.entity.Destination;
-import be.ecotravel.back.entity.Review;
-import be.ecotravel.back.entity.User;
 import be.ecotravel.back.repository.DestinationRepository;
 import be.ecotravel.back.repository.ReviewRepository;
 import be.ecotravel.back.repository.UserRepository;
+import be.ecotravel.back.review.dto.ReviewDeleteDto;
 import be.ecotravel.back.review.dto.ReviewEditDto;
 import be.ecotravel.back.review.mapper.ReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +54,22 @@ public class ReviewService {
         review.setEditedAt(LocalDateTime.now());
 
         reviewRepository.save(review);
+    }
+
+    public void deleteReview(ReviewDeleteDto reviewDto) {
+        Review review = reviewRepository.getReferenceById(reviewDto.reviewId());
+        User reviewUser = review.getUser();
+        User requestUser = userRepository.getReferenceById(reviewDto.userId());
+        UserRole requestUserRole = requestUser.getUserRole();
+
+        System.out.println(reviewUser.getId() + " | " + requestUser.getId());
+        System.out.println(reviewUser.getId().equals(requestUser.getId()));
+        if (!reviewUser.getId().equals(requestUser.getId())
+        && requestUserRole.getName() != UserRoleEnum.ADMIN) {
+            throw new AuthenticationException("You are not allowed to delete this review.");
+        }
+
+        reviewRepository.delete(review);
     }
 
     public void getDestinationReviews() {
