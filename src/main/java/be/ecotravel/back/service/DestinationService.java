@@ -119,4 +119,8 @@ public class DestinationService {
         destinationRepo.save(destination);
         return destination.getId();
     }
+
+    public List<String> getDestinationTypes() {
+        return destinationTypeRepo.getAllTypes();
+    }
 }
