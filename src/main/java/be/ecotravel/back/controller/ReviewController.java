@@ -1,6 +1,7 @@
 package be.ecotravel.back.controller;
 
 import be.ecotravel.back.review.dto.ReviewCreationDto;
+import be.ecotravel.back.review.dto.ReviewEditDto;
 import be.ecotravel.back.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,17 +20,18 @@ public class ReviewController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public void createReview(@RequestBody ReviewCreationDto reviewDto) {
-        reviewService.createReview(reviewDto);
+    public void createReview(@RequestBody ReviewCreationDto review) {
+        reviewService.createReview(review);
     }
 
     @PutMapping()
-    public void updateReview(@RequestBody ReviewCreationDto reviewDto) {
-
+    @ResponseStatus(HttpStatus.OK)
+    public void updateReview(@RequestBody ReviewEditDto review) {
+        reviewService.editReview(review);
     }
 
     @DeleteMapping()
-    public void deleteReview(@RequestBody ReviewCreationDto reviewDto) {
+    public void deleteReview(@RequestBody ReviewCreationDto review) {
 
     }
 
