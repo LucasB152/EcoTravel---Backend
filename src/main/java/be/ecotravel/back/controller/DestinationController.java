@@ -1,7 +1,8 @@
 package be.ecotravel.back.controller;
 
 import be.ecotravel.back.destination.dto.DestinationCreationDto;
-import be.ecotravel.back.destination.dto.DestinationOnSearchDto;
+import be.ecotravel.back.destination.dto.DestinationAllOnSearchDto;
+import be.ecotravel.back.destination.dto.DestinationDetailsDto;
 import be.ecotravel.back.destination.dto.SearchCriteria;
 import be.ecotravel.back.entity.Destination;
 import be.ecotravel.back.service.CloudinaryService;
@@ -34,28 +35,19 @@ public class DestinationController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<DestinationOnSearchDto>> searchDestination(
+    public ResponseEntity<List<DestinationAllOnSearchDto>> searchDestination(
             @RequestParam(required = false) String query,
             @RequestParam(required = false) List<String> tags,
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size) {
+            @RequestParam(required = false) String type) {
 
-        //critère récupérer de l'url
-        SearchCriteria searchCriteria = new SearchCriteria();
-        searchCriteria.setQuery(query);
-        searchCriteria.setTags(tags);
-        searchCriteria.setType(type);
-        searchCriteria.setPage(page);
-        searchCriteria.setSize(size);
-
-        List<DestinationOnSearchDto> destinations = destinationService.searchDestinations(searchCriteria);
+        SearchCriteria searchCriteria = new SearchCriteria(query, tags, type);
+        List<DestinationAllOnSearchDto> destinations = destinationService.searchDestinations(searchCriteria);
         return new ResponseEntity<>(destinations, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Destination> getDestinationById(@PathVariable UUID id) {
-        Destination destination = destinationService.getDestinationById(id);
+    public ResponseEntity<DestinationDetailsDto> getDestinationById(@PathVariable UUID id) {
+        DestinationDetailsDto destination = destinationService.getDestinationDetails(id);
         if (destination == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -66,5 +58,11 @@ public class DestinationController {
     public ResponseEntity<UUID> postDestination(@RequestBody DestinationCreationDto destinationDto) {
         UUID destinationId = destinationService.createDestination(destinationDto);
         return new ResponseEntity<>(destinationId, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/types")
+    public ResponseEntity<List<String>> getDestinationTypes() {
+        List<String> types = destinationService.getDestinationTypes();
+        return new ResponseEntity<>(types, HttpStatus.OK);
     }
 }

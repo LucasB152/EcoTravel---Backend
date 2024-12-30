@@ -5,6 +5,8 @@ import java.util.UUID;
 public record ReviewEditDto(
         UUID id,
         int score,
-        String comment
+        String title,
+        String comment,
+        UUID userId
 ) {
 }

@@ -6,8 +6,10 @@ import java.util.UUID;
 public record ReviewResponseDto(
         UUID id,
         int score,
+        String title,
         String comment,
         boolean edited,
         String username,
-        String dateString
+        String dateStringCreation,
+        String dateStringModification
 ) {}

@@ -55,6 +55,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	implementation("com.google.maps:google-maps-services:2.1.2")
 }
 
 tasks.withType<Test> {

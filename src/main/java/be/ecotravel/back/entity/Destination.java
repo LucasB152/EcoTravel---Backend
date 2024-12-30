@@ -14,11 +14,12 @@ public class Destination {
     //TODO Peut être revoir le nombre d'argument dans la table pour les infos min-max (prix et capacité ) ?
 
     @Id
-    @GeneratedValue(strategy= GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String price;
@@ -43,6 +44,6 @@ public class Destination {
     private Address address;
 
     @ManyToMany
-    private Set<Tag> tags;
+    private Set<Tag> tag;
 
 }
