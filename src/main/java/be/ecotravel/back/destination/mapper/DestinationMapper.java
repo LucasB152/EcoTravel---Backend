@@ -25,6 +25,7 @@ public interface DestinationMapper {
     @Mapping(target = "destinationID", source = "id")
     @Mapping(target = "images", expression = "java(new String[]{entity.getImageFolderPath()})")
     @Mapping(target = "latitude", source = "address.latitude")
+    @Mapping(target = "longitude", source = "address.longitude")
     DestinationSearchDto toSearchDto(Destination entity);
 
     @Mapping(target = "destinationID", source = "id")
