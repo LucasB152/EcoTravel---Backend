@@ -1,5 +1,6 @@
 package be.ecotravel.back.service;
 
+import be.ecotravel.back.entity.DestinationTypeEnum;
 import be.ecotravel.back.entity.Request;
 import be.ecotravel.back.entity.RequestStatusEnum;
 import be.ecotravel.back.entity.User;
@@ -9,11 +10,13 @@ import be.ecotravel.back.request.dto.RequestCreationDto;
 import be.ecotravel.back.request.dto.RequestPutDto;
 import be.ecotravel.back.request.dto.RequestResponseDto;
 import be.ecotravel.back.request.mapper.RequestMapper;
+import be.ecotravel.back.util.BitFieldUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +41,16 @@ public class RequestService {
     }
 
     public void createRequest(RequestCreationDto requestDto) {
-        User user = userRepo.getReferenceById(requestDto.userId());
-        Request request = new Request(requestDto.text(), RequestStatusEnum.WAITING, user);
+        User user = userRepo.findById(requestDto.userId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        String[] activitiesSource = Arrays.stream(DestinationTypeEnum.values())
+                .map(Enum::name)
+                .toArray(String[]::new);
+        int serviceNumber = BitFieldUtils.toNumber(activitiesSource, requestDto.services());
+
+        Request request = requestMapper.toEntity(requestDto, serviceNumber, user);
+
         requestRepo.save(request);
     }
 

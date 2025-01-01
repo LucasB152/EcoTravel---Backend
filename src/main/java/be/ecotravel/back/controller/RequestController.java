@@ -23,7 +23,7 @@ public class RequestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> postRequest(@RequestBody RequestCreationDto dto) { //TODO RequestParam ou RequestBody ?
+    public ResponseEntity<Void> postRequest(@RequestBody RequestCreationDto dto) {
         requestService.createRequest(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

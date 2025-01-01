@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 public class Request {
 
@@ -14,27 +15,34 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Setter
-    private String text;
+    @Column(nullable = false)
+    String contactEmail;
 
-    @Setter
+    @Column(nullable = false)
+    String contactPhone;
+
+    @Column(nullable = false)
+    String motivation;
+
+    String company;
+
+    String identifier;
+
+    String websiteUrl;
+
+    String description;
+
+    @Column(nullable = false)
+    int services;
+
     @Enumerated(EnumType.ORDINAL)
     private RequestStatusEnum status;
 
     @OneToOne(optional = false)
     private User user;
 
-    protected Request() {}
+    public Request() {
 
-    public Request(String text, RequestStatusEnum status, User user) {
-        this.text = text;
-        this.status = status;
-        this.user = user;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.id = UUID.randomUUID();
     }
 
 }
