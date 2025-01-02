@@ -1,19 +1,16 @@
 package be.ecotravel.back.service;
 
 import be.ecotravel.back.destination.dto.DestinationCreationDto;
-import be.ecotravel.back.destination.dto.DestinationAllOnSearchDto;
+import be.ecotravel.back.destination.dto.DestinationSearchDto;
 import be.ecotravel.back.destination.dto.DestinationDetailsDto;
-import be.ecotravel.back.destination.dto.SearchCriteria;
 import be.ecotravel.back.destination.mapper.DestinationMapper;
 import be.ecotravel.back.entity.*;
 import be.ecotravel.back.repository.DestinationRepository;
 import be.ecotravel.back.repository.DestinationTypeRepository;
 import be.ecotravel.back.repository.UserRepository;
-import be.ecotravel.back.search.QuerySearchCriteriaStrategy;
-import be.ecotravel.back.search.SearchCriteriaStrategy;
-import be.ecotravel.back.search.TagSearchCriteriaStrategy;
-import be.ecotravel.back.search.TypeSearchCriteriaStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +25,7 @@ public class DestinationService {
     private final DestinationRepository destinationRepo;
     private final DestinationTypeRepository destinationTypeRepo;
     private final UserRepository userRepo;
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
     public DestinationService(
@@ -35,52 +33,15 @@ public class DestinationService {
             DestinationRepository destinationRepo,
             DestinationTypeRepository destinationTypeRepo,
             UserRepository userRepo,
-            SearchService searchService
+            SearchService searchService,
+            CloudinaryService cloudinaryService
     ) {
         this.destinationMapper = destinationMapper;
         this.destinationRepo = destinationRepo;
         this.destinationTypeRepo = destinationTypeRepo;
         this.userRepo = userRepo;
         this.searchService = searchService;
-    }
-
-    public List<Destination> getPopular() {
-        return this.destinationRepo.findAll();
-    }
-
-
-    /**
-     * Client de la stratégie de recherche
-     */
-    public List<DestinationAllOnSearchDto> searchDestinations(SearchCriteria searchCriteria) {
-
-        //debug a suppr
-        //AddressCreationDto addressCreationDto = null;
-        //        if (searchCriteria.query() != null && !searchCriteria.query().isEmpty()) {
-        //            try {
-        //                GeocodingResult[] results = googleMapsService.geocodeAddress(searchCriteria.query());
-        //                if (results.length > 0) {
-        //                    addressCreationDto = googleMapsService.getAddressCreationDto(results[0]);
-        //                }
-        //            } catch (Exception e) {
-        //                e.printStackTrace();
-        //            }
-        //        }
-
-        List<SearchCriteriaStrategy> criteriaList = List.of(
-                new QuerySearchCriteriaStrategy(searchCriteria.query()),
-                new TagSearchCriteriaStrategy(searchCriteria.tags()),
-                new TypeSearchCriteriaStrategy(searchCriteria.type())
-        );
-
-        List<Destination> destinations = searchService.search(criteriaList);
-
-        //todo a peut etre changer
-        return destinations.stream()
-                .map(destination -> new DestinationAllOnSearchDto(
-                        destination.getId()
-                ))
-                .collect(Collectors.toList());
+        this.cloudinaryService = cloudinaryService;
     }
 
     public DestinationDetailsDto getDestinationDetails(UUID id) {
@@ -88,6 +49,14 @@ public class DestinationService {
 
         if (destination == null) {
             return null;
+        }
+
+        //todo changer try catch quand cloudinary sera ok
+        List<String> images = List.of(destination.getImageFolderPath());
+        try {
+            images = cloudinaryService.getImagesFromFolder(destination.getImageFolderPath());
+        } catch (Exception ignored) {
+
         }
 
         //todo utiliser un mapper
@@ -99,12 +68,19 @@ public class DestinationService {
                 destination.getCapacity(),
                 destination.getContactPhone(),
                 destination.getContactEmail(),
-                List.of(destination.getImageFolderPath()),
+                images,
                 destination.getDestinationType().getType().name(),
                 destination.getAddress().toString(),
                 destination.getTag().stream().map(Tag::getName).collect(Collectors.toList()),
                 destination.isVisible()
         );
+    }
+
+    public Page<DestinationSearchDto> searchDestinations(String query, List<String> tags, String type, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        Page<Destination> destinationsPage = searchService.searchDestinations(query, tags, type, pageRequest);
+
+        return destinationsPage.map(destinationMapper::toSearchDto);
     }
 
     public UUID createDestination(DestinationCreationDto destinationDto) {
