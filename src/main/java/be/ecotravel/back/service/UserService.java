@@ -168,4 +168,13 @@ public class UserService {
     public void deleteUserById(String id) {
         userRepository.deleteById(UUID.fromString(id));
     }
+
+    public void promoteToAdmin(String userId) {
+        User user = findUserById(userId);
+
+        UserRole userRole = userRoleRepo.findByName(UserRoleEnum.ADMIN).orElseThrow();
+
+        user.setUserRole(userRole);
+        userRepository.save(user);
+    }
 }

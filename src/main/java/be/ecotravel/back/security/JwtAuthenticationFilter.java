@@ -61,11 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (userId != null && authentication == null) {
                 User userDetails = userRepository.findUserById(UUID.fromString(userId)).orElseThrow();
 
-                System.out.println(userDetails);
-
                 String role = tokenService.extractClaim(jwt, claims -> claims.get("role", String.class));
-
-                System.out.println(role);
 
                 if (tokenService.isTokenValid(jwt, userDetails)) {
                     Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -84,6 +80,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
+            System.out.println("Exception : " + exception.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().flush();
         }
