@@ -1,34 +1,35 @@
 package be.ecotravel.back.service;
 
 import be.ecotravel.back.entity.Destination;
-import be.ecotravel.back.repository.DestinationRepository;
-import be.ecotravel.back.search.SearchCriteriaStrategy;
+import be.ecotravel.back.entity.DestinationTypeEnum;
+import be.ecotravel.back.repository.PageDestinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-/**
- * context du DP strategy des critères de recherche
- */
 @Service
 public class SearchService {
 
-    private final DestinationRepository destinationRepository;
+    private final PageDestinationRepository pageDestinationRepository;
 
     @Autowired
-    public SearchService(DestinationRepository destinationRepository) {
-        this.destinationRepository = destinationRepository;
+    public SearchService(PageDestinationRepository pageDestinationRepository) {
+        this.pageDestinationRepository = pageDestinationRepository;
     }
 
-    public List<Destination> search(List<SearchCriteriaStrategy> criteriaList) {
-        List<Destination> destinations = destinationRepository.findAll();
-        for (SearchCriteriaStrategy criteria : criteriaList) {
-            destinations = destinations.stream()
-                    .filter(criteria::matches)
-                    .collect(Collectors.toList());
+    public Page<Destination> searchDestinations(String query, List<String> tags, String type, PageRequest pageRequest) {
+        //todo: implement search by query
+        DestinationTypeEnum destinationTypeEnum = null;
+        long tagCount = (tags == null) ? 0 : tags.size();
+        if (type != null) {
+            try {
+                destinationTypeEnum = DestinationTypeEnum.valueOf(type);
+            } catch (IllegalArgumentException ignored) {
+            }
         }
-        return destinations;
+        return pageDestinationRepository.findAllSortedByAverageScore(tags, tagCount, destinationTypeEnum, pageRequest);
     }
 }

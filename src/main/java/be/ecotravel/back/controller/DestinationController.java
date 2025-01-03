@@ -1,13 +1,12 @@
 package be.ecotravel.back.controller;
 
 import be.ecotravel.back.destination.dto.DestinationCreationDto;
-import be.ecotravel.back.destination.dto.DestinationAllOnSearchDto;
+import be.ecotravel.back.destination.dto.DestinationSearchDto;
 import be.ecotravel.back.destination.dto.DestinationDetailsDto;
-import be.ecotravel.back.destination.dto.SearchCriteria;
-import be.ecotravel.back.entity.Destination;
 import be.ecotravel.back.service.CloudinaryService;
 import be.ecotravel.back.service.DestinationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,21 +27,15 @@ public class DestinationController {
         this.cloudinaryService = cloudinaryService;
     }
 
-    @GetMapping("/popular-destination")
-    public ResponseEntity<List<Destination>> destinations() {
-        List<Destination> popularDestination = this.destinationService.getPopular();
-        return new ResponseEntity<>(popularDestination, HttpStatus.OK);
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<DestinationAllOnSearchDto>> searchDestination(
-            @RequestParam(required = false) String query,
-            @RequestParam(required = false) List<String> tags,
-            @RequestParam(required = false) String type) {
-
-        SearchCriteria searchCriteria = new SearchCriteria(query, tags, type);
-        List<DestinationAllOnSearchDto> destinations = destinationService.searchDestinations(searchCriteria);
-        return new ResponseEntity<>(destinations, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<Page<DestinationSearchDto>> searchDestinations(
+            @RequestParam(value = "q", required = false) String query,
+            @RequestParam(value = "tags", required = false) List<String> tags,
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(destinationService.searchDestinations(query, tags, type, page, size));
     }
 
     @GetMapping("/{id}")

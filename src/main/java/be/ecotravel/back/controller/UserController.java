@@ -1,5 +1,6 @@
 package be.ecotravel.back.controller;
 
+import be.ecotravel.back.entity.User;
 import be.ecotravel.back.service.UserService;
 import be.ecotravel.back.user.dto.UserCreationDto;
 import be.ecotravel.back.user.dto.UserPasswordModificationDto;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("api/user")
@@ -23,10 +25,22 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> allUsers = userService.getAllUsers();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
         UserResponse response = userService.getUserById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable String id){
+        userService.deleteUserById(id);
+        return ResponseEntity.ok(Map.of("Message", "Votre compte à bien été supprimé"));
     }
 
     @PutMapping("/{id}")

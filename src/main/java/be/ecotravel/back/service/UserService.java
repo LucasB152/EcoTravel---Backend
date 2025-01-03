@@ -18,6 +18,7 @@ import be.ecotravel.back.user.dto.UserResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -101,6 +102,10 @@ public class UserService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
+    }
+
     public UserResponse putUserById(String id, UserCreationDto registerUserDto) { //TODO Changer ça avec le front pour avoir une bonne dto distincte et pas garder celle de la creation
         User user = findUserById(id);
         Optional<User> userFromDb = userRepository.findByEmail(registerUserDto.email());
@@ -154,5 +159,9 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(userDto.newPassword()));
         userRepository.save(user);
+    }
+
+    public void deleteUserById(String id) {
+        userRepository.deleteById(UUID.fromString(id));
     }
 }
