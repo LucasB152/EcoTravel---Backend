@@ -1,16 +1,16 @@
 package be.ecotravel.back.controller;
 
+import be.ecotravel.back.entity.Tag;
 import be.ecotravel.back.service.TagService;
+import be.ecotravel.back.tag.dto.TagCreationDto;
 import be.ecotravel.back.tag.dto.TagResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RequestMapping("/api/tag")
@@ -39,5 +39,16 @@ public class TagController {
         return new ResponseEntity<>(tags, HttpStatus.OK);
     }
 
+    @PostMapping()
+    public ResponseEntity<?> postTag(@RequestBody TagCreationDto tag){
+        List<TagResponseDto> updatedTagList = this.tagService.postTag(tag);
+        return ResponseEntity.ok(Map.of("Message", "Le tag a bien été ajouté", "Tags", updatedTagList));
+    }
+
+    @DeleteMapping ("/{id}")
+    public ResponseEntity<?> deleteTag(@PathVariable String id){
+        List<TagResponseDto> updatedTagList = this.tagService.deleteTag(UUID.fromString(id));
+        return ResponseEntity.ok(Map.of("Message", "Le tag a bien été supprimé", "Tags", updatedTagList));
+    }
 
 }

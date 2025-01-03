@@ -8,6 +8,7 @@ import be.ecotravel.back.repository.UserRepository;
 import be.ecotravel.back.repository.UserRoleRepository;
 import be.ecotravel.back.user.dto.UserCreationDto;
 import be.ecotravel.back.user.dto.UserPasswordModificationDto;
+import be.ecotravel.back.user.dto.UserRoleDto;
 import be.ecotravel.back.user.mapper.UserMapper;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -102,8 +104,10 @@ public class UserService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public List<UserRoleDto> getAllUsers(){
+        return userRepository.findAll().stream().map(
+                this.userMapper::toUserRole
+        ).collect(Collectors.toList());
     }
 
     public UserResponse putUserById(String id, UserCreationDto registerUserDto) { //TODO Changer ça avec le front pour avoir une bonne dto distincte et pas garder celle de la creation
