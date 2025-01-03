@@ -5,6 +5,7 @@ import be.ecotravel.back.service.UserService;
 import be.ecotravel.back.user.dto.UserCreationDto;
 import be.ecotravel.back.user.dto.UserPasswordModificationDto;
 import be.ecotravel.back.user.dto.UserResponse;
+import be.ecotravel.back.user.dto.UserRoleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<User>> getAllUsers(){
-        List<User> allUsers = userService.getAllUsers();
+    public ResponseEntity<List<UserRoleDto>> getAllUsers(){
+        List<UserRoleDto> allUsers = userService.getAllUsers();
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 

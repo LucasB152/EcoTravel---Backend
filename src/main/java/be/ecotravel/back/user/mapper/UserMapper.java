@@ -4,6 +4,7 @@ import be.ecotravel.back.entity.User;
 import be.ecotravel.back.entity.UserRole;
 import be.ecotravel.back.user.dto.UserCreationDto;
 import be.ecotravel.back.user.dto.UserResponse;
+import be.ecotravel.back.user.dto.UserRoleDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -22,5 +23,8 @@ public interface UserMapper {
     @Mapping(target = "firstName", source = "firstName")
     @Mapping(target = "lastName", source = "lastName")
     UserResponse toResponse(User user);
+
+    @Mapping(target = "role", source = "userRole.name")
+    UserRoleDto toUserRole(User user);
 
 }
