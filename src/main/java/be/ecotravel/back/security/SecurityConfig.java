@@ -19,15 +19,11 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig{
 
-    private final AuthenticationProvider authenticationProvider;
-
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfig(
-            JwtAuthenticationFilter jwtAuthenticationFilter,
-            AuthenticationProvider authenticationProvider
+            JwtAuthenticationFilter jwtAuthenticationFilter
     ) {
-        this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
@@ -56,7 +52,7 @@ public class SecurityConfig{
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(List.of("GET","POST", "PUT"));
+        configuration.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
