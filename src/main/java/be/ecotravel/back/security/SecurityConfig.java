@@ -36,6 +36,7 @@ public class SecurityConfig{
                         authorizeRequests
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/destination/**").permitAll()
+                                .requestMatchers("/api/review/**").permitAll()
                                 .requestMatchers("/api/tag/**").permitAll()
                                 .requestMatchers("/api/request/**").permitAll()
                                 .requestMatchers("/api/user/**").authenticated()

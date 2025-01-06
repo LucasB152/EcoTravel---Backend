@@ -92,13 +92,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByDestination(destination);
 
         return reviews.stream()
-                .map(review -> {
-                    User user = review.getUser();
-                    String username = user.getFirstName() + " " + user.getLastName();
-
-                    return reviewMapper.toReviewResponseDto(review, username);
-                })
-                .toList();
+                .map(reviewMapper::toReviewResponseDto)
+                .collect(Collectors.toList());
     }
-
 }

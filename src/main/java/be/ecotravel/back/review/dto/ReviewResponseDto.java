@@ -9,6 +9,7 @@ public record ReviewResponseDto(
         String title,
         String comment,
         boolean edited,
+        UUID userId,
         String username,
         String dateStringCreation,
         String dateStringModification
