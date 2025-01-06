@@ -8,14 +8,16 @@ import be.ecotravel.back.destination.dto.DestinationSearchDto;
 import be.ecotravel.back.entity.Destination;
 import be.ecotravel.back.entity.DestinationType;
 import be.ecotravel.back.entity.User;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {AddressMapper.class})
 public interface DestinationMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "imageFolderPath", ignore = true)
     @Mapping(target = "address", source = "dto.addressCreationDto")
     @Mapping(target = "destinationType", source = "type")
     Destination toEntity(DestinationCreationDto dto, DestinationType type, User user);
@@ -23,9 +25,9 @@ public interface DestinationMapper {
     DestinationResponseDto toResponseDto(Destination entity);
 
     @Mapping(target = "destinationID", source = "id")
-    @Mapping(target = "images", expression = "java(new String[]{entity.getImageFolderPath()})")
     @Mapping(target = "latitude", source = "address.latitude")
     @Mapping(target = "longitude", source = "address.longitude")
+    @Mapping(target = "images", ignore = true)
     DestinationSearchDto toSearchDto(Destination entity);
 
     @Mapping(target = "destinationID", source = "id")
