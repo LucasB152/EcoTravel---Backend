@@ -1,11 +1,21 @@
 package be.ecotravel.back.request.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.UUID;
 
 public record RequestResponseDto(
     UUID id,
-    String text,
-    String status,
-    String userFullName
+    String userFullName,
+    String email,
+    String contactPhone,
+    String motivation,
+    String company,
+    String identifier,
+    String websiteUrl,
+    String[] services,
+    String description,
+    String[] files,
+    String hostStatus
 ) {
 }

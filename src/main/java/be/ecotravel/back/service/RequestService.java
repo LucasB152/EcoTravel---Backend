@@ -1,9 +1,6 @@
 package be.ecotravel.back.service;
 
-import be.ecotravel.back.entity.DestinationTypeEnum;
-import be.ecotravel.back.entity.Request;
-import be.ecotravel.back.entity.RequestStatusEnum;
-import be.ecotravel.back.entity.User;
+import be.ecotravel.back.entity.*;
 import be.ecotravel.back.repository.RequestRepository;
 import be.ecotravel.back.repository.UserRepository;
 import be.ecotravel.back.request.dto.RequestCreationDto;
@@ -14,11 +11,10 @@ import be.ecotravel.back.util.BitFieldUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class RequestService {
@@ -28,19 +24,22 @@ public class RequestService {
     private final UserRepository userRepo;
 
     private final RequestMapper requestMapper;
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
     public RequestService(
             RequestRepository requestRepository,
             UserRepository userRepository,
-            RequestMapper requestMapper
+            RequestMapper requestMapper,
+            CloudinaryService cloudinaryService
     ) {
         this.requestRepo = requestRepository;
         this.userRepo = userRepository;
         this.requestMapper = requestMapper;
+        this.cloudinaryService = cloudinaryService;
     }
 
-    public void createRequest(RequestCreationDto requestDto) {
+    public UUID createRequest(RequestCreationDto requestDto) {
         User user = userRepo.findById(requestDto.userId())
                 .orElseThrow(EntityNotFoundException::new);
 
@@ -49,21 +48,36 @@ public class RequestService {
                 .toArray(String[]::new);
         int serviceNumber = BitFieldUtils.toNumber(activitiesSource, requestDto.services());
 
-        Request request = requestMapper.toEntity(requestDto, serviceNumber, user);
+
+
+        HostStatusEnum hostStatus = HostStatusEnum.valueOf(requestDto.status().toUpperCase());
+
+        Request request = requestMapper.toEntity(requestDto, serviceNumber, user, hostStatus);
 
         requestRepo.save(request);
+
+        return request.getId();
     }
 
     public List<RequestResponseDto> getAllRequests() {
         List<Request> requests = requestRepo.findAll();
         List<RequestResponseDto> requestResponses = new ArrayList<>(requests.size());
 
+        String[] activitiesSource = Arrays.stream(DestinationTypeEnum.values())
+                .map(Enum::name)
+                .toArray(String[]::new);
+
         for (Request request : requests) {
             User user = request.getUser();
             String fullName = user.getFirstName() + " " + user.getLastName();
-            String status = request.getStatus().name();
 
-            RequestResponseDto requestResponseDto = requestMapper.toResponseDto(request, fullName, status);
+            String[] services = Arrays.stream(BitFieldUtils.toArray(activitiesSource, request.getServices()))
+                    .map(service -> DestinationTypeEnum.valueOf(service).getValue())
+                    .toArray(String[]::new);
+
+            String hostStatus = request.getHostStatus().getValue();
+
+            RequestResponseDto requestResponseDto = requestMapper.toResponseDto(request, hostStatus, fullName, user.getEmail(), services);
             requestResponses.add(requestResponseDto);
         }
 
@@ -79,7 +93,21 @@ public class RequestService {
         }
 
         Request request = requestOptional.get();
-        request.setStatus(status);
+        request.setRequestStatus(status);
         requestRepo.save(request); //TODO Save ou se fait automatiquement avec l'orm ?
+    }
+
+    public List<String> addCertificationFile(String requestId, MultipartFile file) {
+        List<String> imageUrls = new ArrayList<>();
+
+        try {
+            String imageUrl = cloudinaryService.uploadFileToFolder(file, "certificationFile/" + requestId, file.getOriginalFilename());
+            imageUrls.add(imageUrl);
+        } catch (IOException e) {
+            throw new RuntimeException("Erreur lors du téléchargement du fichier : " + file.getOriginalFilename(), e);
+        }
+
+
+        return imageUrls;
     }
 }

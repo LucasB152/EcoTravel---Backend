@@ -16,9 +16,6 @@ public class Request {
     private UUID id;
 
     @Column(nullable = false)
-    String contactEmail;
-
-    @Column(nullable = false)
     String contactPhone;
 
     @Column(nullable = false)
@@ -35,8 +32,11 @@ public class Request {
     @Column(nullable = false)
     int services;
 
+    @Enumerated(EnumType.STRING)
+    private HostStatusEnum hostStatus;
+
     @Enumerated(EnumType.ORDINAL)
-    private RequestStatusEnum status;
+    private RequestStatusEnum requestStatus = RequestStatusEnum.WAITING;
 
     @OneToOne(optional = false)
     private User user;

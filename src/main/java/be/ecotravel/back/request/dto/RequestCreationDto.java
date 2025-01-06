@@ -5,8 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 public record RequestCreationDto(
-        String contactEmail,
-        String contactPhone,
+        String phone,
         String motivation,
         String company,
         String identifier,
