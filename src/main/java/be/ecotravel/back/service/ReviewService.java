@@ -51,11 +51,11 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewDto.id())
                 .orElseThrow(() -> new EntityNotFoundException("Review not found"));
 
-        User reviewUser = review.getUser();
-
-        if (!reviewUser.getId().equals(reviewDto.userId())) {
-            throw new AuthenticationException("You are not allowed to edit this review.");
-        }
+//        User reviewUser = review.getUser();
+//
+//        if (!reviewUser.getId().equals(reviewDto.userId())) {
+//            throw new AuthenticationException("You are not allowed to edit this review.");
+//        }
 
         review.setTitle(reviewDto.title());
         review.setComment(reviewDto.comment());
