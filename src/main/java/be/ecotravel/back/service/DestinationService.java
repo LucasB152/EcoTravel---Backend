@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -51,15 +52,14 @@ public class DestinationService {
             return null;
         }
 
-        //todo changer try catch quand cloudinary sera ok
-        List<String> images = List.of(destination.getImageFolderPath());
+        List<String> images = Collections.emptyList();
         try {
-            images = cloudinaryService.getImagesFromFolder(destination.getImageFolderPath());
+            images = cloudinaryService.getImagesFromFolder("destinationPicture/" + id);
         } catch (Exception ignored) {
 
         }
 
-        //todo utiliser un mapper
+        //todo: utiliser un mapper
         return new DestinationDetailsDto(
                 destination.getId(),
                 destination.getName(),
@@ -80,7 +80,18 @@ public class DestinationService {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Page<Destination> destinationsPage = searchService.searchDestinations(query, tags, type, pageRequest);
 
-        return destinationsPage.map(destinationMapper::toSearchDto);
+        return destinationsPage.map(destination -> {
+            List<String> images;
+            DestinationSearchDto destinationSearchDto = null;
+            try {
+                images = cloudinaryService.getImagesFromFolder("destinationPicture/" + destination.getId());
+                destinationSearchDto = destinationMapper.toSearchDto(destination);
+                destinationSearchDto.setImages(images);
+            } catch (Exception ignored) {
+
+            }
+            return destinationSearchDto;
+        });
     }
 
     public UUID createDestination(DestinationCreationDto destinationDto) {

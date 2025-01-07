@@ -32,8 +32,6 @@ public class Destination {
 
     private String contactEmail;
 
-    private String imageFolderPath;
-
     @ManyToOne(optional = false)
     private User user;
 

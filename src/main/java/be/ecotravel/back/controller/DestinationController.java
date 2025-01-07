@@ -19,12 +19,10 @@ import java.util.UUID;
 public class DestinationController {
 
     private final DestinationService destinationService;
-    private final CloudinaryService cloudinaryService;
 
     @Autowired
-    public DestinationController(DestinationService destinationService, CloudinaryService cloudinaryService) {
+    public DestinationController(DestinationService destinationService) {
         this.destinationService = destinationService;
-        this.cloudinaryService = cloudinaryService;
     }
 
     @GetMapping
