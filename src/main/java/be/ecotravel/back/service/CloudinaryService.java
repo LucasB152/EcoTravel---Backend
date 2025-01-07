@@ -51,7 +51,7 @@ public class CloudinaryService {
      * @return Liste d'url
      * @throws Exception
      */
-    public List<String> getImagesFromFolder(String folder) throws Exception {
+    public List<String> getFileFromFolder(String folder) throws Exception {
         Map<String, Object> query = ObjectUtils.asMap("expression", "folder:" + folder);
 
         ApiResponse response = cloudinary.search().expression("folder:" + folder).maxResults(30).execute();

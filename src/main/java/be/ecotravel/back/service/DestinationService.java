@@ -54,7 +54,7 @@ public class DestinationService {
 
         List<String> images = Collections.emptyList();
         try {
-            images = cloudinaryService.getImagesFromFolder("destinationPicture/" + id);
+            images = cloudinaryService.getFileFromFolder("destinationPicture/" + id);
         } catch (Exception ignored) {
 
         }
@@ -84,7 +84,7 @@ public class DestinationService {
             List<String> images;
             DestinationSearchDto destinationSearchDto = null;
             try {
-                images = cloudinaryService.getImagesFromFolder("destinationPicture/" + destination.getId());
+                images = cloudinaryService.getFileFromFolder("destinationPicture/" + destination.getId());
                 destinationSearchDto = destinationMapper.toSearchDto(destination);
                 destinationSearchDto.setImages(images);
             } catch (Exception ignored) {
