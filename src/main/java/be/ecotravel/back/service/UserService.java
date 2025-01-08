@@ -138,7 +138,7 @@ public class UserService {
         String imageUrl;
 
         try {
-            imageUrl = cloudinaryService.uploadImageToFolder(file, "userPicture", id+"_"+ System.currentTimeMillis());
+            imageUrl = cloudinaryService.uploadFileToFolder(file, "userPicture", id+"_"+ System.currentTimeMillis());
         } catch (IOException e) {
             throw new RuntimeException(e); //TODO gérer l'exception pour retourner au front
         }

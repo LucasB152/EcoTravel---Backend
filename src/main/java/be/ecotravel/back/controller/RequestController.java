@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/request")
@@ -24,15 +26,20 @@ public class RequestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> postRequest(@RequestBody RequestCreationDto dto) {
-        requestService.createRequest(dto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Map<String, String>> postRequest(@RequestBody RequestCreationDto dto) {
+        UUID requestId = requestService.createRequest(dto);
+        return ResponseEntity.ok(Map.of("requestId", requestId.toString()));
+    }
+
+    @PostMapping("/files/{requestId}")
+    public ResponseEntity<List<String>> postCertificationFiles(@PathVariable String requestId, @RequestParam("file") MultipartFile file){
+        return ResponseEntity.ok(requestService.addCertificationFile(requestId, file));
     }
 
     @GetMapping()
     public ResponseEntity<List<RequestResponseDto>> getAllRequests() {
         List<RequestResponseDto> requests = requestService.getAllRequests();
-        return new ResponseEntity<>(requests, HttpStatus.FOUND);
+        return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
     @PutMapping()
