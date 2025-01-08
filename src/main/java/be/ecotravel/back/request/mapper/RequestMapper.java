@@ -8,6 +8,8 @@ import be.ecotravel.back.request.dto.RequestResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface RequestMapper {
 
@@ -22,6 +24,7 @@ public interface RequestMapper {
     @Mapping(target = "services", source = "services")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "hostStatus", source = "hostStatus")
-    RequestResponseDto toResponseDto(Request request, String hostStatus, String userFullName, String email, String[] services);
+    @Mapping(target = "files", source = "fileUrl")
+    RequestResponseDto toResponseDto(Request request, String hostStatus, String userFullName, String email, String[] services, List<String> fileUrl);
 
 }

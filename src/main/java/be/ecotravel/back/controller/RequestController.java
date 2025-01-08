@@ -39,7 +39,7 @@ public class RequestController {
     @GetMapping()
     public ResponseEntity<List<RequestResponseDto>> getAllRequests() {
         List<RequestResponseDto> requests = requestService.getAllRequests();
-        return new ResponseEntity<>(requests, HttpStatus.FOUND);
+        return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
     @PutMapping()

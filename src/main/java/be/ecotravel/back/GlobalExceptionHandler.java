@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -51,5 +52,15 @@ public class GlobalExceptionHandler {
         response.put("message", e.getMessage());
         response.put("timestamp", LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Map<String, Object>> handleMaxSizeException(MaxUploadSizeExceededException exception){
+        Map<String, Object> response = new HashMap<>();
+        response.put("error", "Max upload size exceeded");
+        response.put("message", exception.getMessage());
+        response.put("timestamp", LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+
     }
 }

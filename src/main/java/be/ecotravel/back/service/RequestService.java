@@ -60,7 +60,7 @@ public class RequestService {
     }
 
     public List<RequestResponseDto> getAllRequests() {
-        List<Request> requests = requestRepo.findAll();
+        List<Request> requests = requestRepo.findByRequestStatus(RequestStatusEnum.WAITING);
         List<RequestResponseDto> requestResponses = new ArrayList<>(requests.size());
 
         String[] activitiesSource = Arrays.stream(DestinationTypeEnum.values())
@@ -75,9 +75,16 @@ public class RequestService {
                     .map(service -> DestinationTypeEnum.valueOf(service).getValue())
                     .toArray(String[]::new);
 
+            List<String> fileUrl;
+            try {
+                fileUrl = cloudinaryService.getFileFromFolder("certificationFile/" + request.getId());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
             String hostStatus = request.getHostStatus().getValue();
 
-            RequestResponseDto requestResponseDto = requestMapper.toResponseDto(request, hostStatus, fullName, user.getEmail(), services);
+            RequestResponseDto requestResponseDto = requestMapper.toResponseDto(request, hostStatus, fullName, user.getEmail(), services, fileUrl);
             requestResponses.add(requestResponseDto);
         }
 
@@ -101,13 +108,18 @@ public class RequestService {
         List<String> imageUrls = new ArrayList<>();
 
         try {
-            String imageUrl = cloudinaryService.uploadFileToFolder(file, "certificationFile/" + requestId, file.getOriginalFilename());
+            String originalFilename = file.getOriginalFilename();
+
+            String filenameWithoutExtension = originalFilename != null ? originalFilename.substring(0, originalFilename.lastIndexOf('.')) : originalFilename;
+
+            String imageUrl = cloudinaryService.uploadFileToFolder(file, "certificationFile/" + requestId, filenameWithoutExtension);
+
             imageUrls.add(imageUrl);
         } catch (IOException e) {
             throw new RuntimeException("Erreur lors du téléchargement du fichier : " + file.getOriginalFilename(), e);
         }
 
-
         return imageUrls;
     }
+
 }
