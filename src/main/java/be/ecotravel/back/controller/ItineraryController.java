@@ -3,6 +3,7 @@ package be.ecotravel.back.controller;
 import be.ecotravel.back.entity.Itinerary;
 import be.ecotravel.back.itinerary.dto.ItineraryCreationDto;
 import be.ecotravel.back.itinerary.dto.ItineraryDetailsResponseDto;
+import be.ecotravel.back.itinerary.dto.ItineraryListResponseDto;
 import be.ecotravel.back.service.GoogleMapService;
 import be.ecotravel.back.service.ItineraryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,9 @@ public class ItineraryController {
         return null; //TODO
     }
 
-    @GetMapping()
-    public ResponseEntity<List<Itinerary>> getUserItineraries() {
-        return null; //TODO
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ItineraryListResponseDto>> getUserItineraries(@PathVariable UUID userId) {
+        return ResponseEntity.ok(itineraryService.getItineraryFromUser(userId));
     }
 
     @PostMapping()
