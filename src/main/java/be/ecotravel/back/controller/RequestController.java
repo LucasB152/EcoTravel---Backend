@@ -42,10 +42,10 @@ public class RequestController {
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
-    @PutMapping()
-    public ResponseEntity<Void> putRequest(@RequestBody RequestPutDto dto) {
-        requestService.updateRequest(dto);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/{requestId}")
+    public ResponseEntity<Map<String, Object>> putRequest(@PathVariable String requestId, @RequestBody RequestPutDto dto) {
+        List<RequestResponseDto> updatedRequestList = requestService.updateRequest(UUID.fromString(requestId), dto);
+        return ResponseEntity.ok(Map.of("Message", "Le status de la requête a été mis à jour", "Requests", updatedRequestList));
     }
 
 }
