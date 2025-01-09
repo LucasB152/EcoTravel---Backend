@@ -21,13 +21,13 @@ public class Itinerary {
     @ManyToOne(optional = false)
     private User ownerUser;
 
-    @ManyToMany()
-    private Set<User> sharedUsers;
+//    @ManyToMany()
+//    private Set<User> sharedUsers;
 
     @ManyToOne(optional = false)
     private Destination startDestination;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private Destination endDestination;
 
     private double distance;
