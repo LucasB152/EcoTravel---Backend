@@ -13,7 +13,7 @@ public interface ItineraryMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "distance", ignore = true)
-    Itinerary toEntity(ItineraryCreationDto itineraryCreationDto, User ownerUser, Destination startDestination);
+    Itinerary toEntity(ItineraryCreationDto itineraryCreationDto, User ownerUser);
 
     ItineraryListResponseDto toItineraryList(Itinerary itinerary);
 }

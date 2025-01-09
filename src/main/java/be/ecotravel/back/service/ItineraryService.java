@@ -21,34 +21,37 @@ public class ItineraryService {
 
     private final ItineraryRepository itineraryRepository;
     private final ItineraryMapper itineraryMapper;
-
     private final DestinationRepository destinationRepository;
     private final UserRepository userRepository;
+    private final StepService stepService;
 
     @Autowired
     public ItineraryService(
             ItineraryRepository itineraryRepository,
             ItineraryMapper itineraryMapper,
             DestinationRepository destinationRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            StepService stepService
     ) {
         this.itineraryRepository = itineraryRepository;
         this.itineraryMapper = itineraryMapper;
         this.destinationRepository = destinationRepository;
         this.userRepository = userRepository;
+        this.stepService = stepService;
     }
 
-    public UUID createItinerary(ItineraryCreationDto itineraryDto) { //TODO Ajouter double distance pour le créer directement avec
+    public void createItinerary(ItineraryCreationDto itineraryDto) {
         User user = userRepository.findUserById(itineraryDto.userId())
                 .orElseThrow(EntityExistsException::new);
 
         Destination startDestination = destinationRepository.findById(itineraryDto.firstDestination())
                 .orElseThrow(() -> new EntityExistsException("Start Destination Not Found"));
 
-        Itinerary itinerary = itineraryMapper.toEntity(itineraryDto, user, startDestination);
+        Itinerary itinerary = itineraryMapper.toEntity(itineraryDto, user);
 
         itineraryRepository.save(itinerary);
-        return itinerary.getId();
+
+        stepService.createStep(1, startDestination, itinerary);
     }
 
     public List<ItineraryListResponseDto> getItineraryFromUser(UUID userId){
@@ -63,5 +66,4 @@ public class ItineraryService {
 
         return 0;
     }
-
 }

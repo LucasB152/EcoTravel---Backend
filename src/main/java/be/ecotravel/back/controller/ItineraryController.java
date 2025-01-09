@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -37,9 +38,9 @@ public class ItineraryController {
     }
 
     @PostMapping()
-    public ResponseEntity<UUID> createItinerary(@RequestBody ItineraryCreationDto dto) {
-        UUID itineraryId = itineraryService.createItinerary(dto);
-        return null; //TODO
+    public ResponseEntity<Map<String, String>> createItinerary(@RequestBody ItineraryCreationDto dto) {
+        itineraryService.createItinerary(dto);
+        return ResponseEntity.ok(Map.of("Message", "L'itinéraire a bien été créé"));
     }
 
     @PutMapping()
