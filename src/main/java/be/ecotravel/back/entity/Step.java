@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 public class Step implements Comparable<Step> {
 
@@ -14,7 +15,6 @@ public class Step implements Comparable<Step> {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Setter
     private int orderSequence;
 
     @ManyToOne(optional = false)
@@ -23,7 +23,7 @@ public class Step implements Comparable<Step> {
     @ManyToOne(optional = false)
     private Itinerary itinerary;
 
-    protected Step() {}
+    public Step() {}
 
     @Override
     public int compareTo(Step other) {

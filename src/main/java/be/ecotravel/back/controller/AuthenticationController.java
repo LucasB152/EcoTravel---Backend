@@ -72,11 +72,13 @@ public class AuthenticationController {
         return ResponseEntity.ok(loginResponse);
     }
 
-    @GetMapping("/verify-email/{token}")
-    public ResponseEntity<?> verifyEmail(@PathVariable String token){
+    @PostMapping("/verify-email")
+    public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> requestBody){
+        String token = requestBody.get("token");
         String userIdString = tokenService.extractUsername(token);
         userService.activateUser(UUID.fromString(userIdString));
 
-        return ResponseEntity.ok(Map.of("Message", "Email verified"));
+        return ResponseEntity.ok(Map.of("Message", "Votre adresse email est vérifiée. Vous pouvez vous connecter"));
     }
+
 }
