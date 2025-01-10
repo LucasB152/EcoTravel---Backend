@@ -7,11 +7,13 @@ import be.ecotravel.back.repository.DestinationRepository;
 import be.ecotravel.back.repository.ItineraryRepository;
 import be.ecotravel.back.repository.StepRepository;
 import be.ecotravel.back.step.dto.StepAddingDto;
+import be.ecotravel.back.step.dto.StepResponse;
 import be.ecotravel.back.step.mapper.StepMapper;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -56,5 +58,9 @@ public class StepService {
         Step step = stepMapper.toEntity(nextOrderSequence, destination, itinerary);
 
         stepRepository.save(step);
+    }
+
+    public List<StepResponse> getStepsFromItinerary(UUID itineraryId) {
+        return stepRepository.findByItineraryIdOrderByOrderSequenceAsc(itineraryId).stream().map(stepMapper::toStepResponse).toList();
     }
 }

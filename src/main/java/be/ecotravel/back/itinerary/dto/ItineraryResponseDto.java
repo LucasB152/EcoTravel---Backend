@@ -5,10 +5,11 @@ import be.ecotravel.back.step.dto.StepResponse;
 import java.util.List;
 import java.util.UUID;
 
-public record ItineraryDetailsResponseDto(
+public record ItineraryResponseDto(
     UUID id,
     String title,
-    List<StepResponse> steps
+    List<StepResponse> steps,
+    int distance
 
 ) {
 }

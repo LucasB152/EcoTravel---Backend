@@ -15,8 +15,8 @@ public class EmailService {
 
     private final UserRepository userRepo;
 
-    @Value("${ecotravel.apiurl}")
-    private String apiUrl;
+    @Value("${ecotravel.frontUrl}")
+    private String frontUrl;
 
     @Autowired
     public EmailService(
@@ -44,7 +44,7 @@ public class EmailService {
     public void sendConfirmationEmail(String email, String token) {
         verifyEmail(email);
 
-        String verificationLink = apiUrl + "auth/verify-email/" + token;
+        String verificationLink = frontUrl + "verify-email/" + token;
 
         String emailContent =
                 "<html>" +
