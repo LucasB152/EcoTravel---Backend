@@ -91,9 +91,9 @@ public class RequestService {
         return requestResponses;
     }
 
-    public void updateRequest(RequestPutDto dto) {
+    public List<RequestResponseDto> updateRequest(UUID id, RequestPutDto dto) {
         RequestStatusEnum status = RequestStatusEnum.valueOf(dto.status());
-        Optional<Request> requestOptional = requestRepo.findById(dto.id());
+        Optional<Request> requestOptional = requestRepo.findById(id);
 
         if (requestOptional.isEmpty()) {
             throw new EntityNotFoundException("Aucune requête avec cette id");
@@ -101,7 +101,10 @@ public class RequestService {
 
         Request request = requestOptional.get();
         request.setRequestStatus(status);
+        System.out.println(dto.message());
         requestRepo.save(request); //TODO Save ou se fait automatiquement avec l'orm ?
+
+        return getAllRequests();
     }
 
     public List<String> addCertificationFile(String requestId, MultipartFile file) {

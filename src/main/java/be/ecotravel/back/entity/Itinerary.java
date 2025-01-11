@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 public class Itinerary {
 
@@ -14,20 +15,11 @@ public class Itinerary {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Setter
-    private String name;
+    private String title;
 
     @ManyToOne(optional = false)
-    private User user;
+    private User ownerUser;
 
-    @Setter
-    @ManyToOne(optional = false)
-    private Destination startDestination;
-
-    @Setter
-    @ManyToOne(optional = false)
-    private Destination endDestination;
-
-    protected Itinerary() {}
+    private double distance;
 
 }

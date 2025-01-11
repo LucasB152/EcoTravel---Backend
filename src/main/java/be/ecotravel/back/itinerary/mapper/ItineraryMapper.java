@@ -1,0 +1,22 @@
+package be.ecotravel.back.itinerary.mapper;
+
+import be.ecotravel.back.entity.Itinerary;
+import be.ecotravel.back.entity.User;
+import be.ecotravel.back.itinerary.dto.ItineraryCreationDto;
+import be.ecotravel.back.itinerary.dto.ItineraryResponseDto;
+import be.ecotravel.back.step.dto.StepResponse;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.util.List;
+
+@Mapper(componentModel = "spring")
+public interface ItineraryMapper {
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "distance", ignore = true)
+    Itinerary toEntity(ItineraryCreationDto itineraryCreationDto, User ownerUser);
+
+    @Mapping(target = "steps", source = "steps")
+    ItineraryResponseDto toItineraryList(Itinerary itinerary, List<StepResponse> steps);
+}
