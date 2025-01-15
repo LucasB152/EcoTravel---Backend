@@ -1,6 +1,5 @@
 package be.ecotravel.back.controller;
 
-import be.ecotravel.back.entity.User;
 import be.ecotravel.back.exception.AuthenticationException;
 import be.ecotravel.back.exception.UserNotVerifiedException;
 import be.ecotravel.back.service.EmailService;
@@ -10,8 +9,6 @@ import be.ecotravel.back.service.AuthenticationService;
 import be.ecotravel.back.service.UserService;
 import be.ecotravel.back.user.dto.UserLoginDto;
 import be.ecotravel.back.user.dto.UserCreationDto;
-import be.ecotravel.back.user.dto.UserResponse;
-import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +20,6 @@ import java.util.UUID;
 @RestController
 public class AuthenticationController {
     private final TokenService tokenService;
-
     private final AuthenticationService authenticationService;
     private final UserService userService;
     private final EmailService emailService;

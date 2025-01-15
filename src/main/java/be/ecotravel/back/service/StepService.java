@@ -10,6 +10,7 @@ import be.ecotravel.back.step.dto.StepAddingDto;
 import be.ecotravel.back.step.dto.StepResponse;
 import be.ecotravel.back.step.mapper.StepMapper;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,5 +63,52 @@ public class StepService {
 
     public List<StepResponse> getStepsFromItinerary(UUID itineraryId) {
         return stepRepository.findByItineraryIdOrderByOrderSequenceAsc(itineraryId).stream().map(stepMapper::toStepResponse).toList();
+    }
+
+    public void deleteStepFromItinerary(UUID stepId, UUID itineraryId) {
+        Step step = stepRepository.findById(stepId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        int maxOrder = stepRepository.findMaxOrderSequenceByItineraryId(itineraryId);
+
+        for(int i = step.getOrderSequence()+1; i <= maxOrder; i++){
+            Step stepToModify = stepRepository.findByItineraryIdAndOrderSequence(itineraryId, i);
+            stepToModify.setOrderSequence(i - 1);
+            stepRepository.save(stepToModify);
+        }
+
+        stepRepository.delete(step);
+    }
+
+    public void putStepUp(UUID stepId, UUID itineraryId) {
+        Step step = stepRepository.findById(stepId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        int actualOrder = step.getOrderSequence();
+        if (actualOrder > 1) {
+            Step stepUp = stepRepository.findByItineraryIdAndOrderSequence(itineraryId, actualOrder - 1);
+            step.setOrderSequence(actualOrder - 1);
+            stepUp.setOrderSequence(actualOrder);
+
+            stepRepository.save(step);
+            stepRepository.save(stepUp);
+        }
+    }
+
+    public void putStepDown(UUID stepId, UUID itineraryId) {
+        Step step = stepRepository.findById(stepId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        int maxOrder = stepRepository.findMaxOrderSequenceByItineraryId(itineraryId);
+
+        int actualOrder = step.getOrderSequence();
+        if(actualOrder < maxOrder){
+            Step stepDown = stepRepository.findByItineraryIdAndOrderSequence(itineraryId, actualOrder + 1);
+            stepDown.setOrderSequence(actualOrder);
+            step.setOrderSequence(actualOrder + 1);
+
+            stepRepository.save(step);
+            stepRepository.save(stepDown);
+        }
     }
 }
