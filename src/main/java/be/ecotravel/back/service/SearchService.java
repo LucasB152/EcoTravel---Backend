@@ -21,7 +21,6 @@ public class SearchService {
     }
 
     public Page<Destination> searchDestinations(String query, List<String> tags, String type, PageRequest pageRequest) {
-        //todo: implement search by query
         DestinationTypeEnum destinationTypeEnum = null;
         long tagCount = (tags == null) ? 0 : tags.size();
         if (type != null) {
@@ -30,6 +29,6 @@ public class SearchService {
             } catch (IllegalArgumentException ignored) {
             }
         }
-        return pageDestinationRepository.findAllSortedByAverageScore(tags, tagCount, destinationTypeEnum, pageRequest);
+        return pageDestinationRepository.findAllSortedByAverageScoreWithQuery(query, tags, tagCount, destinationTypeEnum, pageRequest);
     }
 }

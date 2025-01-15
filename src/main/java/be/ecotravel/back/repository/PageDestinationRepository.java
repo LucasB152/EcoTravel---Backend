@@ -17,21 +17,24 @@ import java.util.UUID;
 public interface PageDestinationRepository extends PagingAndSortingRepository<Destination, UUID> {
 
     @Query("""
-            SELECT d
-            FROM Destination d
-            LEFT JOIN Review r ON d.id = r.destination.id
-            LEFT JOIN d.tag t
-            WHERE (:tags IS NULL OR t.name IN :tags)
-            AND (:type IS NULL OR d.destinationType.type = :type)
-            GROUP BY d.id
-            HAVING COUNT(t.name) = :tagCount OR :tags IS NULL
-            ORDER BY COALESCE(AVG(r.score), 0) DESC
-            """)
-    Page<Destination> findAllSortedByAverageScore(
+        SELECT d
+        FROM Destination d
+        LEFT JOIN Review r ON d.id = r.destination.id
+        LEFT JOIN d.tag t
+        WHERE (:query IS NULL OR LOWER(d.name) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(d.description) LIKE LOWER(CONCAT('%', :query, '%')))
+        AND (:tags IS NULL OR t.name IN :tags)
+        AND (:type IS NULL OR d.destinationType.type = :type)
+        GROUP BY d.id
+        HAVING COUNT(t.name) = :tagCount OR :tags IS NULL
+        ORDER BY COALESCE(AVG(r.score), 0) DESC
+        """)
+    Page<Destination> findAllSortedByAverageScoreWithQuery(
+            @Param("query") String query,
             @Param("tags") List<String> tags,
             @Param("tagCount") long tagCount,
             @Param("type") DestinationTypeEnum type,
             Pageable pageable
     );
+
 
 }
