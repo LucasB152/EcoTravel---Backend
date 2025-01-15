@@ -14,4 +14,8 @@ public interface StepRepository extends JpaRepository<Step, UUID> {
     Integer findMaxOrderSequenceByItineraryId(@Param("itineraryId") UUID itineraryId);
 
     List<Step> findByItineraryIdOrderByOrderSequenceAsc(UUID itineraryId);
+
+    @Query("SELECT s FROM Step s WHERE s.itinerary.id = :itineraryId AND s.orderSequence = :orderSequence")
+    Step findByItineraryIdAndOrderSequence(@Param("itineraryId") UUID itineraryId, @Param("orderSequence") int orderSequence);
+
 }

@@ -11,6 +11,7 @@ import be.ecotravel.back.repository.ItineraryRepository;
 import be.ecotravel.back.repository.UserRepository;
 import be.ecotravel.back.step.dto.StepResponse;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class ItineraryService {
 
     public void createItinerary(ItineraryCreationDto itineraryDto) {
         User user = userRepository.findUserById(itineraryDto.userId())
-                .orElseThrow(EntityExistsException::new);
+                .orElseThrow(EntityNotFoundException::new);
 
         Destination startDestination = destinationRepository.findById(itineraryDto.firstDestination())
                 .orElseThrow(() -> new EntityExistsException("Start Destination Not Found"));
@@ -57,7 +58,7 @@ public class ItineraryService {
 
     public List<ItineraryResponseDto> getItineraryFromUser(UUID userId) {
         User user = userRepository.findUserById(userId)
-                .orElseThrow(EntityExistsException::new);
+                .orElseThrow(EntityNotFoundException::new);
 
 
         return itineraryRepository.findByOwnerUser(user).stream().map(itinerary -> {
@@ -74,10 +75,26 @@ public class ItineraryService {
 
     public ItineraryResponseDto getItinerary(UUID id) {
         Itinerary itinerary = itineraryRepository.findById(id)
-                .orElseThrow(EntityExistsException::new);
+                .orElseThrow(EntityNotFoundException::new);
 
         List<StepResponse> steps = stepService.getStepsFromItinerary(id);
 
         return itineraryMapper.toItineraryResponse(itinerary, steps);
+    }
+
+    public void deleteItinerary(UUID id) {
+        Itinerary itinerary = itineraryRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        this.itineraryRepository.delete(itinerary);
+    }
+
+    public void updateItineraryName(UUID itineraryId, String newTitle) {
+        Itinerary itinerary = itineraryRepository.findById(itineraryId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        itinerary.setTitle(newTitle);
+
+        itineraryRepository.save(itinerary);
     }
 }
