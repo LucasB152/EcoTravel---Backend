@@ -28,7 +28,7 @@ public class ItineraryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ItineraryResponseDto> getItinerary(@PathVariable UUID id) {
-        return null; //TODO
+        return ResponseEntity.ok(itineraryService.getItinerary(id));
     }
 
     @GetMapping("/user/{userId}")

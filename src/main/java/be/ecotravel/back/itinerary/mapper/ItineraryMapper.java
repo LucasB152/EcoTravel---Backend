@@ -18,5 +18,6 @@ public interface ItineraryMapper {
     Itinerary toEntity(ItineraryCreationDto itineraryCreationDto, User ownerUser);
 
     @Mapping(target = "steps", source = "steps")
-    ItineraryResponseDto toItineraryList(Itinerary itinerary, List<StepResponse> steps);
+    ItineraryResponseDto toItineraryResponse(Itinerary itinerary, List<StepResponse> steps);
+
 }
