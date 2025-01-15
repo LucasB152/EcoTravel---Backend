@@ -62,7 +62,7 @@ public class ItineraryService {
 
         return itineraryRepository.findByOwnerUser(user).stream().map(itinerary -> {
             List<StepResponse> steps = stepService.getStepsFromItinerary(itinerary.getId());
-            return itineraryMapper.toItineraryList(itinerary, steps);
+            return itineraryMapper.toItineraryResponse(itinerary, steps);
         }).toList();
     }
 
@@ -70,5 +70,14 @@ public class ItineraryService {
         double emissionFactor;
 
         return 0;
+    }
+
+    public ItineraryResponseDto getItinerary(UUID id) {
+        Itinerary itinerary = itineraryRepository.findById(id)
+                .orElseThrow(EntityExistsException::new);
+
+        List<StepResponse> steps = stepService.getStepsFromItinerary(id);
+
+        return itineraryMapper.toItineraryResponse(itinerary, steps);
     }
 }

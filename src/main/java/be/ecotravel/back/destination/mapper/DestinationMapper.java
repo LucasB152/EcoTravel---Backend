@@ -8,11 +8,8 @@ import be.ecotravel.back.destination.dto.DestinationSearchDto;
 import be.ecotravel.back.entity.Destination;
 import be.ecotravel.back.entity.DestinationType;
 import be.ecotravel.back.entity.User;
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {AddressMapper.class})
 public interface DestinationMapper {
