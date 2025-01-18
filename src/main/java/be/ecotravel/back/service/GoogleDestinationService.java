@@ -13,9 +13,6 @@ import java.util.List;
 @Service
 public class GoogleDestinationService {
 
-    @Value("${google.api.key}")
-    private String apiKey;
-
     public double fetchDistanceFromAPI(String originCoordinates, List<String> stepsCoordinates, String destinationCoordinates) {
         String stepParameters = "";
 
@@ -32,8 +29,8 @@ public class GoogleDestinationService {
 
         String parameters = "destination=" + destinationCoordinates + "&origin=" + originCoordinates + stepParameters;
 
-        String baseUrl = "https://maps.googleapis.com/maps/api/directions/json?%s&key=%s";
-        String finalUrl = String.format(baseUrl, parameters, apiKey);
+        String baseUrl = "https://maps.googleapis.com/maps/api/directions/json?%s&key=AIzaSyCkyuA7mezQv6ynC-a5p76wUhYeqjfsZ9I";
+        String finalUrl = String.format(baseUrl, parameters);
 
         System.out.println(finalUrl);
         RestTemplate restTemplate = new RestTemplate();
