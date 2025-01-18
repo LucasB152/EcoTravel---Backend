@@ -58,22 +58,10 @@ public class DestinationService {
         } catch (Exception ignored) {
 
         }
-
-        //todo: utiliser un mapper
-        return new DestinationDetailsDto(
-                destination.getId(),
-                destination.getName(),
-                destination.getDescription(),
-                destination.getPrice(),
-                destination.getCapacity(),
-                destination.getContactPhone(),
-                destination.getContactEmail(),
-                images,
-                destination.getDestinationType().getType().name(),
-                destination.getAddress().toString(),
-                destination.getTag().stream().map(Tag::getName).collect(Collectors.toList()),
-                destination.isVisible()
-        );
+        DestinationDetailsDto destinationDetailDto = destinationMapper.toDetailsDto(destination);
+        destinationDetailDto.setImages(images);
+        destinationDetailDto.setTags(destination.getTag().stream().map(Tag::getName).collect(Collectors.toList()));
+        return destinationDetailDto;
     }
 
     public Page<DestinationSearchDto> searchDestinations(String query, List<String> tags, String type, int page, int size) {

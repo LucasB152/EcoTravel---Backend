@@ -31,6 +31,9 @@ public interface DestinationMapper {
     @Mapping(target = "images", ignore = true)
     @Mapping(target = "destinationType", source = "destinationType.type")
     @Mapping(target = "address", source = "address.street")
+    @Mapping(target = "latitude", source = "address.latitude")
+    @Mapping(target = "longitude", source = "address.longitude")
+    @Mapping(target = "tags", ignore = true)
     DestinationDetailsDto toDetailsDto(Destination entity);
 
 }
