@@ -56,7 +56,7 @@ public class ItineraryService {
         stepService.createStep(1, startDestination, itinerary);
     }
 
-    public List<ItineraryResponseDto> getItineraryFromUser(UUID userId) {
+    public List<ItineraryResponseDto> getItinerariesFromUser(UUID userId) {
         User user = userRepository.findUserById(userId)
                 .orElseThrow(EntityNotFoundException::new);
 
@@ -65,12 +65,6 @@ public class ItineraryService {
             List<StepResponse> steps = stepService.getStepsFromItinerary(itinerary.getId());
             return itineraryMapper.toItineraryResponse(itinerary, steps);
         }).toList();
-    }
-
-    private double calculateCarbonFootprint(Itinerary itinerary) {
-        double emissionFactor;
-
-        return 0;
     }
 
     public ItineraryResponseDto getItinerary(UUID id) {
