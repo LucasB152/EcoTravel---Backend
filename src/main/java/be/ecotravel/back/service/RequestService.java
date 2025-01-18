@@ -102,7 +102,7 @@ public class RequestService {
         Request request = requestOptional.get();
         request.setRequestStatus(status);
         System.out.println(dto.message());
-        requestRepo.save(request); //TODO Save ou se fait automatiquement avec l'orm ?
+        requestRepo.save(request);
 
         return getAllRequests();
     }

@@ -30,5 +30,4 @@ public class Address {
     private double latitude;
 
     public Address() {}
-
 }

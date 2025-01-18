@@ -110,7 +110,7 @@ public class UserService {
         ).collect(Collectors.toList());
     }
 
-    public UserResponse putUserById(String id, UserCreationDto registerUserDto) { //TODO Changer ça avec le front pour avoir une bonne dto distincte et pas garder celle de la creation
+    public UserResponse putUserById(String id, UserCreationDto registerUserDto) {
         User user = findUserById(id);
         Optional<User> userFromDb = userRepository.findByEmail(registerUserDto.email());
 

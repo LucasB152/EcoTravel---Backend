@@ -45,12 +45,6 @@ public class DestinationController {
         return new ResponseEntity<>(destination, HttpStatus.OK);
     }
 
-    @PostMapping()
-    public ResponseEntity<UUID> postDestination(@RequestBody DestinationCreationDto destinationDto) {
-        UUID destinationId = destinationService.createDestination(destinationDto);
-        return new ResponseEntity<>(destinationId, HttpStatus.CREATED);
-    }
-
     @GetMapping("/types")
     public ResponseEntity<List<String>> getDestinationTypes() {
         List<String> types = destinationService.getDestinationTypes();
