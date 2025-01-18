@@ -21,7 +21,13 @@ public interface PageDestinationRepository extends PagingAndSortingRepository<De
         FROM Destination d
         LEFT JOIN Review r ON d.id = r.destination.id
         LEFT JOIN d.tag t
-        WHERE (:query IS NULL OR LOWER(d.name) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(d.description) LIKE LOWER(CONCAT('%', :query, '%')))
+        LEFT JOIN d.address a ON d.address.id = a.id
+        WHERE (:query IS NULL
+                 OR LOWER(d.name) LIKE LOWER(CONCAT('%', :query, '%'))
+                 OR LOWER(d.description) LIKE LOWER(CONCAT('%', :query, '%')))
+                 OR LOWER(a.street) LIKE LOWER(CONCAT('%', :query, '%'))
+                 OR LOWER(a.country) LIKE LOWER(CONCAT('%', :query, '%'))
+                 OR LOWER(a.location) LIKE LOWER(CONCAT('%', :query, '%'))
         AND (:tags IS NULL OR t.name IN :tags)
         AND (:type IS NULL OR d.destinationType.type = :type)
         GROUP BY d.id
