@@ -41,7 +41,7 @@ public class ReportService {
     }
 
     public List<ReportResponseDto> getReportsOfDestination(DestinationCreationDto destinationCreationDto) throws Exception {
-        throw new Exception(); //TODO
+        throw new Exception();
     }
 
 }

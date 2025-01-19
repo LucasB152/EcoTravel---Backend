@@ -1,5 +1,6 @@
 package be.ecotravel.back.controller;
 
+import be.ecotravel.back.entity.HostStatusEnum;
 import be.ecotravel.back.entity.RequestStatusEnum;
 import be.ecotravel.back.request.dto.RequestCreationDto;
 import be.ecotravel.back.request.dto.RequestPutDto;

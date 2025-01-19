@@ -37,12 +37,12 @@ public class TagService {
                 .orElse(null);
     }
 
-    public List<TagResponseDto> deleteTag(UUID id){
+    public List<TagResponseDto> deleteTag(UUID id) {
         this.tagRepository.deleteById(id);
         return getAll();
     }
 
-    public List<TagResponseDto> postTag(TagCreationDto tagCreationDto){
+    public List<TagResponseDto> postTag(TagCreationDto tagCreationDto) {
         Tag tag = tagMapper.toEntity(tagCreationDto);
         this.tagRepository.save(tag);
         return getAll();

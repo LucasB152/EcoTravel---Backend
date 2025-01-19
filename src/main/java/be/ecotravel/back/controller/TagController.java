@@ -5,6 +5,7 @@ import be.ecotravel.back.service.TagService;
 import be.ecotravel.back.tag.dto.TagCreationDto;
 import be.ecotravel.back.tag.dto.TagResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,8 +48,12 @@ public class TagController {
 
     @DeleteMapping ("/{id}")
     public ResponseEntity<?> deleteTag(@PathVariable String id){
-        List<TagResponseDto> updatedTagList = this.tagService.deleteTag(UUID.fromString(id));
-        return ResponseEntity.ok(Map.of("Message", "Le tag a bien été supprimé", "Tags", updatedTagList));
+        try {
+            List<TagResponseDto> updatedTagList = this.tagService.deleteTag(UUID.fromString(id));
+            return ResponseEntity.ok(Map.of("Message", "Le tag a bien été supprimé", "Tags", updatedTagList));
+        }catch (DataIntegrityViolationException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

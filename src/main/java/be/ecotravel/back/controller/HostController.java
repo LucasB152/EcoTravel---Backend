@@ -44,10 +44,10 @@ public class HostController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/image")
-    public ResponseEntity<String> deleteImage(@RequestBody Map<String, String> request) {
+    @DeleteMapping("/destination/{destinationId}/image")
+    public ResponseEntity<DestinationDetailsDto> deleteImage(@PathVariable UUID destinationId, @RequestBody Map<String, String> request) {
         cloudinaryService.deleteImageByUrl(request.get("imageUrl"));
-        return ResponseEntity.ok("Image supprimée avec succès");
+        return ResponseEntity.ok(destinationService.getDestinationDetails(destinationId));
     }
 
     @DeleteMapping("/{hostId}/destination/{destinationId}")

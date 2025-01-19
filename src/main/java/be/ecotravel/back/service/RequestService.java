@@ -23,18 +23,21 @@ public class RequestService {
     private final UserRepository userRepo;
     private final RequestMapper requestMapper;
     private final CloudinaryService cloudinaryService;
+    private final EmailService emailService;
 
     @Autowired
     public RequestService(
             RequestRepository requestRepository,
             UserRepository userRepository,
             RequestMapper requestMapper,
-            CloudinaryService cloudinaryService
+            CloudinaryService cloudinaryService,
+            EmailService emailService
     ) {
         this.requestRepo = requestRepository;
         this.userRepo = userRepository;
         this.requestMapper = requestMapper;
         this.cloudinaryService = cloudinaryService;
+        this.emailService = emailService;
     }
 
     public UUID createRequest(RequestCreationDto requestDto) {
@@ -98,9 +101,30 @@ public class RequestService {
         }
 
         Request request = requestOptional.get();
+
+        User user = request.getUser();
+
         request.setRequestStatus(status);
-        System.out.println(dto.message());
         requestRepo.save(request);
+
+        String emailContent =
+                "<html>" +
+                        "<body>" +
+                        "<p>Bonjour,</p>" +
+                        "<p>Merci d'avoir fait la demande pour devenir hébergeur sur EcoTravel!'</p>" +
+                        "<p>Votre demande à malheureusement été refusée..</p>" +
+                        "<p>Voici la raison :</p>" +
+                        "<p>" + dto.message() + "</p>" +
+                        "<p>Nous vous souhaitons une belle journée!</p>" +
+                        "<p>L'équipe EcoTravel</p>" +
+                        "</body>" +
+                        "</html>";
+
+        if(dto.status().equals("ACCEPTED")){
+            emailService.sendEmail("lucas@ecotravel.com", user.getEmail(), "Votre demande de compte hôte à été acceptée", dto.message());
+        }else{
+            emailService.sendEmail("lucas@ecotravel.com", user.getEmail(), "Votre demande de compte hôte à été refusé", emailContent);
+        }
 
         return getAllRequests();
     }
