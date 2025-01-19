@@ -1,5 +1,6 @@
 package be.ecotravel.back.controller;
 
+import be.ecotravel.back.entity.RequestStatusEnum;
 import be.ecotravel.back.request.dto.RequestCreationDto;
 import be.ecotravel.back.request.dto.RequestPutDto;
 import be.ecotravel.back.request.dto.RequestResponseDto;
@@ -40,6 +41,12 @@ public class RequestController {
     public ResponseEntity<List<RequestResponseDto>> getAllRequests() {
         List<RequestResponseDto> requests = requestService.getAllRequests();
         return new ResponseEntity<>(requests, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}/status")
+    public ResponseEntity<RequestStatusEnum> getStatusFromRequest(@PathVariable UUID userId){
+        RequestStatusEnum status = requestService.getRequestStatusFromUser(userId);
+        return ResponseEntity.ok(status);
     }
 
     @PutMapping("/{requestId}")

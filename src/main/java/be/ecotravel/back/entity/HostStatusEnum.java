@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum HostStatusEnum {
-    INDEPENDANT("Indépendant"),
+    PARTICULIER("Particulier"),
     SARL("SARL"),
     AUTO_ENTREPRENEUR("Auto-entrepreneur"),
     ASSOCIATION("Association");

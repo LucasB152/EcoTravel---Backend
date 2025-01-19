@@ -110,11 +110,11 @@ public class UserService {
         ).collect(Collectors.toList());
     }
 
-    public UserResponse putUserById(String id, UserCreationDto registerUserDto) { //TODO Changer ça avec le front pour avoir une bonne dto distincte et pas garder celle de la creation
+    public UserResponse putUserById(String id, UserCreationDto registerUserDto) {
         User user = findUserById(id);
         Optional<User> userFromDb = userRepository.findByEmail(registerUserDto.email());
 
-        if (registerUserDto.email() != null) { //TODO Faire en sorte que les annotations des dtos puissent fonctionner directement pour améliorer l'expension de l'app
+        if (registerUserDto.email() != null) {
             if(userFromDb.isEmpty() || userFromDb.get() == user){
                 user.setEmail(registerUserDto.email());
             }else{
