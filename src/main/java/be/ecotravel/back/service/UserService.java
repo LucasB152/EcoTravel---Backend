@@ -140,7 +140,7 @@ public class UserService {
         try {
             imageUrl = cloudinaryService.uploadFileToFolder(file, "userPicture", id+"_"+ System.currentTimeMillis());
         } catch (IOException e) {
-            throw new RuntimeException(e); //TODO gérer l'exception pour retourner au front
+            throw new RuntimeException(e);
         }
 
         User user = findUserById(id);

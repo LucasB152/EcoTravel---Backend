@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 
 @Service
@@ -47,6 +49,7 @@ public class CloudinaryService {
 
     /**
      * Récupère la liste des urls de toutes les images dans le folder
+     *
      * @param folder Dossier dont on veut les images
      * @return Liste d'url
      * @throws Exception
@@ -84,7 +87,6 @@ public class CloudinaryService {
         }
     }
 
-
     private String extractPublicIdFromUrl(String imageUrl) {
         String baseUrl = "https://res.cloudinary.com/" + cloudName + "/image/upload/";
 
@@ -94,6 +96,12 @@ public class CloudinaryService {
             int firstSlashIndex = pathWithVersionAndExtension.indexOf('/');
             if (firstSlashIndex != -1) {
                 String pathWithoutVersion = pathWithVersionAndExtension.substring(firstSlashIndex + 1);
+
+                try {
+                    pathWithoutVersion = URLDecoder.decode(pathWithoutVersion, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    return pathWithoutVersion;
+                }
 
                 int dotIndex = pathWithoutVersion.lastIndexOf('.');
                 return (dotIndex != -1) ? pathWithoutVersion.substring(0, dotIndex) : pathWithoutVersion;

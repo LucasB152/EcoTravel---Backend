@@ -27,7 +27,7 @@ public class EmailService {
         this.userRepo = userRepo;
     }
 
-    private void sendEmail(String from, String to, String subject, String text) {
+    public void sendEmail(String from, String to, String subject, String text) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(to);
         mail.setFrom(from);
@@ -60,7 +60,7 @@ public class EmailService {
                 "</html>";
 
         sendEmail(
-                "lucasbauduin15@gmail.com",
+                "lucas@ecotravel.com",
                 email,
                 "Vérifiez votre adresse e-mail",
                 emailContent

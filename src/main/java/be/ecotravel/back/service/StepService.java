@@ -63,7 +63,7 @@ public class StepService {
         Step step = stepMapper.toEntity(nextOrderSequence, destination, itinerary);
 
         stepRepository.save(step);
-        //updateDistance(stepAddingDto.itineraryId());
+        updateDistance(stepAddingDto.itineraryId());
     }
 
     public List<StepResponse> getStepsFromItinerary(UUID itineraryId) {
@@ -83,7 +83,7 @@ public class StepService {
         }
 
         stepRepository.delete(step);
-        //updateDistance(itineraryId);
+        updateDistance(itineraryId);
     }
 
     public void putStepUp(UUID stepId, UUID itineraryId) {
@@ -99,7 +99,7 @@ public class StepService {
             stepRepository.save(step);
             stepRepository.save(stepUp);
         }
-        //updateDistance(itineraryId);
+        updateDistance(itineraryId);
     }
 
     public void putStepDown(UUID stepId, UUID itineraryId) {
@@ -117,7 +117,7 @@ public class StepService {
             stepRepository.save(step);
             stepRepository.save(stepDown);
         }
-        //updateDistance(itineraryId);
+        updateDistance(itineraryId);
     }
 
     private void updateDistance(UUID itineraryId) {

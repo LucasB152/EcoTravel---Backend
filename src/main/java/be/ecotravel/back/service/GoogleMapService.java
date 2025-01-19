@@ -43,7 +43,7 @@ public class GoogleMapService {
 
     private double getDistanceFromResponse(String response) {
         JsonArray legs = getLegsFromResponse(response);
-        return legs.get(0).getAsJsonObject().get("distance").getAsJsonObject().get("value").getAsDouble();
+        return legs.get(0).getAsJsonObject().get("distance").getAsJsonObject().get("value").getAsDouble()/1000/3;
     }
 
     private JsonArray getLegsFromResponse(String response) {

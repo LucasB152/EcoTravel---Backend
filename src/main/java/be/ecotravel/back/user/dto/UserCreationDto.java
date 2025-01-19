@@ -14,7 +14,7 @@ public record UserCreationDto(
         @NotBlank(message = "Lastname cannot be blank")
         String lastName,
         /*@NotNull(message = "Password cannot be null")
-        @NotBlank(message = "Password cannot be blank")*/ //TODO Rajouter ceci une fois que le reste de putUser est fait
+        @NotBlank(message = "Password cannot be blank")*/
         String password
 ) {
 }
