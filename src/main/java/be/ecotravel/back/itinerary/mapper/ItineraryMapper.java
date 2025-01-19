@@ -14,8 +14,8 @@ import java.util.List;
 public interface ItineraryMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "distance", ignore = true)
-    Itinerary toEntity(ItineraryCreationDto itineraryCreationDto, User ownerUser);
+    @Mapping(target = "distance", source="distance")
+    Itinerary toEntity(ItineraryCreationDto itineraryCreationDto, User ownerUser, int distance);
 
     @Mapping(target = "steps", source = "steps")
     ItineraryResponseDto toItineraryResponse(Itinerary itinerary, List<StepResponse> steps);

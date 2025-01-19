@@ -49,7 +49,7 @@ public class ItineraryService {
         Destination startDestination = destinationRepository.findById(itineraryDto.firstDestination())
                 .orElseThrow(() -> new EntityExistsException("Start Destination Not Found"));
 
-        Itinerary itinerary = itineraryMapper.toEntity(itineraryDto, user);
+        Itinerary itinerary = itineraryMapper.toEntity(itineraryDto, user, 0);
 
         itineraryRepository.save(itinerary);
 
@@ -65,12 +65,6 @@ public class ItineraryService {
             List<StepResponse> steps = stepService.getStepsFromItinerary(itinerary.getId());
             return itineraryMapper.toItineraryResponse(itinerary, steps);
         }).toList();
-    }
-
-    private double calculateCarbonFootprint(Itinerary itinerary) {
-        double emissionFactor;
-
-        return 0;
     }
 
     public ItineraryResponseDto getItinerary(UUID id) {

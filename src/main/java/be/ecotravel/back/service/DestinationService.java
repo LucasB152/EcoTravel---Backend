@@ -95,13 +95,13 @@ public class DestinationService {
         User user = userRepository.findUserById(userId).orElseThrow();
 
         Set<Tag> tags = new HashSet<>();
-        for(String tagId : destinationDto.tagsId()){
+        for (String tagId : destinationDto.tagsId()) {
             Tag tag = tagRepository.findById(UUID.fromString(tagId))
                     .orElseThrow(EntityNotFoundException::new);
             tags.add(tag);
         }
 
-        Address address = addressService.createAddress(destinationDto.country(),  destinationDto.location(), destinationDto.street(), destinationDto.number(), destinationDto.zipcode());
+        Address address = addressService.createAddress(destinationDto.country(), destinationDto.location(), destinationDto.street(), destinationDto.number(), destinationDto.zipcode());
 
         Destination destination = destinationMapper.toEntity(destinationDto, type, user, tags, address);
 
@@ -117,8 +117,8 @@ public class DestinationService {
         User host = userRepository.findUserById(hostId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        return destinationRepository.findAllByUser(host).stream().map(
-                destinationMapper::toDestinationResponseDto
+        return destinationRepository.findAllByUser(host).stream().map(destinationMapper::toDestinationResponseDto
+
         ).toList();
 
     }
@@ -156,13 +156,13 @@ public class DestinationService {
         DestinationType type = destinationTypeRepository.findByType(typeEnum).orElseThrow(EntityNotFoundException::new);
 
         Set<Tag> tags = new HashSet<>();
-        for(String tagId : updatedDestination.tagsId()){
+        for (String tagId : updatedDestination.tagsId()) {
             Tag tag = tagRepository.findById(UUID.fromString(tagId))
                     .orElseThrow(EntityNotFoundException::new);
             tags.add(tag);
         }
 
-        Address address = addressService.createAddress(updatedDestination.country(),  updatedDestination.location(), updatedDestination.street(), updatedDestination.number(), updatedDestination.zipcode());
+        Address address = addressService.createAddress(updatedDestination.country(), updatedDestination.location(), updatedDestination.street(), updatedDestination.number(), updatedDestination.zipcode());
 
 
         destination.setName(updatedDestination.name());

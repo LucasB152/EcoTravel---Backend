@@ -94,7 +94,7 @@ public class RequestService {
         Optional<Request> requestOptional = requestRepo.findById(id);
 
         if (requestOptional.isEmpty()) {
-            throw new EntityNotFoundException("Aucune requête avec cette id");
+            throw new EntityNotFoundException("Aucune requête avec cette destinationID");
         }
 
         Request request = requestOptional.get();

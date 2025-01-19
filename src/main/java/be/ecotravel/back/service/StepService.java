@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,17 +24,20 @@ public class StepService {
     private final StepMapper stepMapper;
     private final ItineraryRepository itineraryRepository;
     private final DestinationRepository destinationRepository;
+    public final GoogleMapService googleMapService;
 
     @Autowired
     public StepService(StepRepository stepRepository,
                        StepMapper stepMapper,
                        ItineraryRepository itineraryRepository,
-                       DestinationRepository destinationRepository
+                       DestinationRepository destinationRepository,
+                       GoogleMapService googleMapService
     ) {
         this.stepRepository = stepRepository;
         this.stepMapper = stepMapper;
         this.itineraryRepository = itineraryRepository;
         this.destinationRepository = destinationRepository;
+        this.googleMapService = googleMapService;
     }
 
     public Step createStep(int orderSequence, Destination startDestination, Itinerary itinerary) {
@@ -59,6 +63,7 @@ public class StepService {
         Step step = stepMapper.toEntity(nextOrderSequence, destination, itinerary);
 
         stepRepository.save(step);
+        //updateDistance(stepAddingDto.itineraryId());
     }
 
     public List<StepResponse> getStepsFromItinerary(UUID itineraryId) {
@@ -71,13 +76,14 @@ public class StepService {
 
         int maxOrder = stepRepository.findMaxOrderSequenceByItineraryId(itineraryId);
 
-        for(int i = step.getOrderSequence()+1; i <= maxOrder; i++){
+        for (int i = step.getOrderSequence() + 1; i <= maxOrder; i++) {
             Step stepToModify = stepRepository.findByItineraryIdAndOrderSequence(itineraryId, i);
             stepToModify.setOrderSequence(i - 1);
             stepRepository.save(stepToModify);
         }
 
         stepRepository.delete(step);
+        //updateDistance(itineraryId);
     }
 
     public void putStepUp(UUID stepId, UUID itineraryId) {
@@ -93,6 +99,7 @@ public class StepService {
             stepRepository.save(step);
             stepRepository.save(stepUp);
         }
+        //updateDistance(itineraryId);
     }
 
     public void putStepDown(UUID stepId, UUID itineraryId) {
@@ -102,7 +109,7 @@ public class StepService {
         int maxOrder = stepRepository.findMaxOrderSequenceByItineraryId(itineraryId);
 
         int actualOrder = step.getOrderSequence();
-        if(actualOrder < maxOrder){
+        if (actualOrder < maxOrder) {
             Step stepDown = stepRepository.findByItineraryIdAndOrderSequence(itineraryId, actualOrder + 1);
             stepDown.setOrderSequence(actualOrder);
             step.setOrderSequence(actualOrder + 1);
@@ -110,5 +117,26 @@ public class StepService {
             stepRepository.save(step);
             stepRepository.save(stepDown);
         }
+        //updateDistance(itineraryId);
+    }
+
+    private void updateDistance(UUID itineraryId) {
+        List<Step> allStep = stepRepository.findByItineraryIdOrderByOrderSequenceAsc(itineraryId);
+
+        List<String> stepCoordinates = new ArrayList<>();
+        allStep.forEach(step -> {
+                    double longitude = step.getDestination().getAddress().getLongitude();
+                    double latitude = step.getDestination().getAddress().getLatitude();
+                    stepCoordinates.add(latitude + "," + longitude);
+                }
+        );
+
+        double distance = googleMapService.fetchDistanceFromAPI(stepCoordinates);
+        Itinerary itinerary = itineraryRepository.findById(itineraryId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        itinerary.setDistance(distance);
+
+        itineraryRepository.save(itinerary);
     }
 }
