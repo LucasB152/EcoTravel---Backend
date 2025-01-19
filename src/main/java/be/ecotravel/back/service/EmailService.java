@@ -60,7 +60,7 @@ public class EmailService {
                 "</html>";
 
         sendEmail(
-                "lucas@ecotravel.com",
+                "lucasbauduin15@gmail.com",
                 email,
                 "Vérifiez votre adresse e-mail",
                 emailContent
