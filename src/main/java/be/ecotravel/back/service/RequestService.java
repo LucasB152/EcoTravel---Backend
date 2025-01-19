@@ -20,9 +20,7 @@ import java.util.*;
 public class RequestService {
 
     private final RequestRepository requestRepo;
-
     private final UserRepository userRepo;
-
     private final RequestMapper requestMapper;
     private final CloudinaryService cloudinaryService;
 
@@ -102,7 +100,7 @@ public class RequestService {
         Request request = requestOptional.get();
         request.setRequestStatus(status);
         System.out.println(dto.message());
-        requestRepo.save(request); //TODO Save ou se fait automatiquement avec l'orm ?
+        requestRepo.save(request);
 
         return getAllRequests();
     }
@@ -125,4 +123,12 @@ public class RequestService {
         return imageUrls;
     }
 
+    public RequestStatusEnum getRequestStatusFromUser(UUID userId) {
+        User user = userRepo.findUserById(userId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        Optional<Request> requestOptional = this.requestRepo.findByUser(user);
+
+        return requestOptional.map(Request::getRequestStatus).orElse(null);
+    }
 }

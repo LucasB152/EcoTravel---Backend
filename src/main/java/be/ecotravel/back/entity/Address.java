@@ -31,4 +31,8 @@ public class Address {
 
     public Address() {}
 
+    @Override
+    public String toString() {
+        return street + " " + number + ", " + zipcode + " " + location + ", " + country;
+    }
 }

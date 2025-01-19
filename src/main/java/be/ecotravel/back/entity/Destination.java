@@ -11,7 +11,6 @@ import java.util.UUID;
 @Setter
 @Entity
 public class Destination {
-    //TODO Peut être revoir le nombre d'argument dans la table pour les infos min-max (prix et capacité ) ?
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,7 +25,7 @@ public class Destination {
 
     private String capacity;
 
-    private boolean isVisible;
+    private boolean isVisible = true;
 
     private String contactPhone;
 

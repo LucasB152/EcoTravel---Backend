@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
-
 /**
  * DTO for destination details.
  * !!!!!la liste des images et la liste des tags peuvent changer et devenir juste des ID!!!!!
