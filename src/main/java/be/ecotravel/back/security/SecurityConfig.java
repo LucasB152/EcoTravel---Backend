@@ -42,7 +42,7 @@ public class SecurityConfig{
                                 .requestMatchers("/api/user/**").authenticated()
                                 .requestMatchers("/api/itinerary/**").authenticated()
                                 .requestMatchers("/api/step/**").authenticated()
-                                .requestMatchers("/api/host/**").permitAll() //TODO: Changer en hasRole("HOST")
+                                .requestMatchers("/api/host/**").hasRole("HOST")
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
