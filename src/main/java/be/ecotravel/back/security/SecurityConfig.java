@@ -1,5 +1,6 @@
 package be.ecotravel.back.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,6 +19,8 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
+    @Value("${ecotravel.frontUrl}")
+    private String apiUrl;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -55,7 +58,7 @@ public class SecurityConfig{
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOrigins(List.of(apiUrl));
         configuration.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
 
