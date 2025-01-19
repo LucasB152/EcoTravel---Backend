@@ -29,6 +29,10 @@ public class SearchService {
             } catch (IllegalArgumentException ignored) {
             }
         }
-        return pageDestinationRepository.findAllSortedByAverageScoreWithQuery(query, tags, tagCount, destinationTypeEnum, pageRequest);
+        if (tagCount > 0) {
+            return pageDestinationRepository.findAllSortedByAverageScoreWithTag(query,destinationTypeEnum, tags, tagCount , pageRequest);
+        }
+        else return pageDestinationRepository.findAllSortedByAverageScore(query,destinationTypeEnum, pageRequest);
+
     }
 }
