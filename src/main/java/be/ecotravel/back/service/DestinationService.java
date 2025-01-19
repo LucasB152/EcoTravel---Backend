@@ -75,7 +75,7 @@ public class DestinationService {
                 destination.getContactPhone(),
                 destination.getContactEmail(),
                 images,
-                destination.getDestinationType().getType().name(),
+                destination.getDestinationType().getType().value,
                 destination.getAddress().toString(),
                 destination.getTag().stream().map(Tag::getName).collect(Collectors.toList()),
                 destination.isVisible()
@@ -142,7 +142,7 @@ public class DestinationService {
 
             String filenameWithoutExtension = originalFilename != null ? originalFilename.substring(0, originalFilename.lastIndexOf('.')) : originalFilename;
 
-            String imageUrl = cloudinaryService.uploadFileToFolder(file, "destinationPictures/" + destinationId, filenameWithoutExtension);
+            String imageUrl = cloudinaryService.uploadFileToFolder(file, "destinationPicture/" + destinationId, filenameWithoutExtension);
 
             imageUrls.add(imageUrl);
         } catch (IOException e) {
@@ -158,5 +158,35 @@ public class DestinationService {
                 .orElseThrow(EntityNotFoundException::new);
 
         destinationRepository.delete(destination);
+    }
+
+    public void modifyDestination(UUID destinationId, DestinationCreationDto updatedDestination) {
+        Destination destination = destinationRepository.findById(destinationId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        DestinationTypeEnum typeEnum = DestinationTypeEnum.valueOf(updatedDestination.destinationType());
+        DestinationType type = destinationTypeRepository.findByType(typeEnum).orElseThrow(EntityNotFoundException::new);
+
+        Set<Tag> tags = new HashSet<>();
+        for(String tagId : updatedDestination.tagsId()){
+            Tag tag = tagRepository.findById(UUID.fromString(tagId))
+                    .orElseThrow(EntityNotFoundException::new);
+            tags.add(tag);
+        }
+
+        Address address = addressService.createAddress(updatedDestination.country(),  updatedDestination.location(), updatedDestination.street(), updatedDestination.number(), updatedDestination.zipcode());
+
+
+        destination.setName(updatedDestination.name());
+        destination.setDescription(updatedDestination.description());
+        destination.setCapacity(updatedDestination.capacity());
+        destination.setContactEmail(updatedDestination.contactEmail());
+        destination.setContactPhone(updatedDestination.contactPhone());
+        destination.setDestinationType(type);
+        destination.setAddress(address);
+        destination.setPrice(updatedDestination.price());
+        destination.setTag(tags);
+
+        destinationRepository.save(destination);
     }
 }

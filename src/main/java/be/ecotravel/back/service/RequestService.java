@@ -20,9 +20,7 @@ import java.util.*;
 public class RequestService {
 
     private final RequestRepository requestRepo;
-
     private final UserRepository userRepo;
-
     private final RequestMapper requestMapper;
     private final CloudinaryService cloudinaryService;
 
@@ -125,4 +123,12 @@ public class RequestService {
         return imageUrls;
     }
 
+    public RequestStatusEnum getRequestStatusFromUser(UUID userId) {
+        User user = userRepo.findUserById(userId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        Optional<Request> requestOptional = this.requestRepo.findByUser(user);
+
+        return requestOptional.map(Request::getRequestStatus).orElse(null);
+    }
 }
